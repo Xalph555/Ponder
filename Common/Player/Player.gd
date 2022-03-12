@@ -25,7 +25,9 @@ var limit_speed := max_speed
 export var on_floor_friction := 0.25
 export var in_air_friction := 0.3
 
-# jump variablles
+var _current_gravity : float
+
+# jump variables
 export var jump_height := 38.0 setget set_jump_height
 export var jump_time_to_peak := 0.4 setget set_jump_time_to_peak
 export var jump_time_to_descent := 0.35 setget set_jump_time_to_descent
@@ -45,6 +47,8 @@ var _snap_vector := _SNAP_DIR * _SNAP_VEC_LEN
 var velocity := Vector2.ZERO
 var _input_dir := Vector2.ZERO
 
+var is_flying := false
+
 # references
 onready var _sprite := $Sprite
 
@@ -58,7 +62,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	update_inputs()
 	
-	velocity.y += get_gravity() * delta
+	velocity.y += 10 # get_gravity() * delta
 	velocity.x = clamp(velocity.x + _input_dir.x * acceleration, -limit_speed, limit_speed)
 	
 	limit_speed = lerp(limit_speed, max_speed, 0.02)
@@ -96,6 +100,8 @@ func update_sprite() -> void:
 		
 	elif _input_dir.x < 0:
 		_sprite.scale.x = -1
+		
+	# flip fishing rod
 
 
 func update_inputs() -> void:
@@ -121,7 +127,11 @@ func update_inputs() -> void:
 			jump()
 		
 	else:
-		_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+		if is_flying:
+			_snap_vector = Vector2.ZERO
+		
+		else:
+			_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
 
 
 # Jump-related functions
@@ -169,6 +179,7 @@ func set_jump_time_to_descent(value : float) -> void:
 # Speed-related functions
 func apply_friction() -> void:
 	if is_on_floor():
+		is_flying = false
 		velocity.x = lerp(velocity.x, 0, on_floor_friction)
 		
 	else:

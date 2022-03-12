@@ -3,7 +3,7 @@
 [ext_resource path="res://Common/Player/TestPlayerSprite.png" type="Texture" id=1]
 [ext_resource path="res://Common/Areas/HitHurtBox/HurtBox.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Common/Player/Player.gd" type="Script" id=3]
-[ext_resource path="res://Common/Player/UsableItems/FishingRod/FishingRod.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Common/Player/UsableItems/FishingRod/PACRod/PACFishingRod.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 6.0
@@ -14,10 +14,17 @@ radius = 5.0
 height = 8.0
 
 [node name="Player" type="KinematicBody2D"]
+collision_layer = 512
 script = ExtResource( 3 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 0, -40 )
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+drag_margin_left = 0.02
+drag_margin_top = 0.02
+drag_margin_right = 0.02
+drag_margin_bottom = 0.02
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
@@ -33,7 +40,6 @@ shape = SubResource( 2 )
 
 [node name="ActiveTool" type="Node2D" parent="."]
 
-[node name="FishingRod" parent="ActiveTool" instance=ExtResource( 4 )]
-position = Vector2( 0, 2 )
+[node name="PACFishingRod" parent="ActiveTool" instance=ExtResource( 4 )]
 
 [editable path="HurtBox"]

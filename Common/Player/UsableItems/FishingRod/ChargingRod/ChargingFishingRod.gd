@@ -1,5 +1,5 @@
 #--------------------------------------#
-# Fishing Rod Script                   #
+# Charging Fishing Rod Script          #
 #--------------------------------------#
 extends Node2D
 
