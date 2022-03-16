@@ -6,7 +6,9 @@ extends Node2D
 
 # Variables:
 #---------------------------------------
-export(PackedScene) var hook;
+export(PackedScene) var hook
+
+export var line_length := 20.0
 
 var _hook_instance
 
@@ -22,9 +24,9 @@ onready var parent = get_parent().get_parent()
 # Functions:
 #---------------------------------------
 func _physics_process(delta: float) -> void:
-	if parent.is_on_floor():
-		if _can_grapple:
-			parent.is_flying = false
+#	if parent.is_on_floor():
+#		if _can_grapple:
+#			parent.is_flying = false
 	
 	# charging rod
 	if Input.is_action_just_pressed("Action1") and _can_grapple:
@@ -37,10 +39,11 @@ func _physics_process(delta: float) -> void:
 		
 		throw_grapple()
 
-	
 	# throw rod
 	if Input.is_action_just_released("Action1"):
 		release_grapple()
+	
+	update_sprite()
 
 
 func throw_grapple() -> void:
@@ -48,7 +51,7 @@ func throw_grapple() -> void:
 		_can_grapple = false
 		
 		var hook_dir : Vector2 = get_global_mouse_position() - _hook_point.global_position
-		print(rad2deg(hook_dir.angle()))
+#		print(rad2deg(hook_dir.angle()))
 		hook_dir = hook_dir.normalized()
 		
 		#print(rad2deg(to_local(hook_dir).angle()))
@@ -70,3 +73,8 @@ func release_grapple() -> void:
 		
 		_hook_instance.release()
 		_hook_instance = null
+
+
+func update_sprite() -> void:
+	if _hook_instance:
+		_pivot_point.look_at(_hook_instance.global_position)

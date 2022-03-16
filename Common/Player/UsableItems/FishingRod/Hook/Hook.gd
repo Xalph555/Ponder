@@ -8,9 +8,11 @@ extends KinematicBody2D
 #---------------------------------------
 var _move_speed := 1000
 
-var _pull_x := 15
-var _pull_y := 15
+var _pull_x := 60
+var _pull_y := 105
 var _hook_pull := Vector2(_pull_x, _pull_y)
+
+var tension_vec := Vector2.ZERO
 
 var _hook_origin : Position2D
 
@@ -52,16 +54,17 @@ func apply_tension():
 	# adjusting pull direction
 	_hook_pull.x = sign(_hook_dir.x) * abs(_hook_pull.x)
 	_hook_pull.y = sign(_hook_dir.y) * abs(_hook_pull.y)
-
-	var tension_vec := _hook_dir * _hook_dir.dot(_hook_pull)
 	
-#	# dead space
-	var dead_space := 15.0
-	if _distance_to_origin < dead_space:
-		tension_vec *= 0.005 #0.005 * (_pull_x + _pull_y)/2
+	tension_vec = _hook_dir * _hook_dir.dot(_hook_pull)
 	
 	_parent.limit_speed = _parent.max_speed * 1.3
 	_parent.velocity += tension_vec
+	
+	# dead space
+	var dead_space := 20.0
+	if _distance_to_origin < dead_space:
+		var parent_origin_dist = (_parent.global_position - _hook_origin.global_position).length()
+		_parent.global_position = self.global_position + (_hook_dir * -1 * (dead_space + parent_origin_dist))
 
 
 func fly_hook(delta: float):
@@ -81,7 +84,6 @@ func shoot(shooter: KinematicBody2D, pos : Position2D, dir: Vector2) -> void:
 	_parent = shooter
 	_hook_origin = pos
 	global_position = _hook_origin.global_position
-	
 	_move_dir = dir
 	
 	_is_hooked = false

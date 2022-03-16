@@ -23,7 +23,7 @@ export var max_speed := 400
 var limit_speed := max_speed
 
 export var on_floor_friction := 0.25
-export var in_air_friction := 0.3
+export var in_air_friction := 0.2
 
 var _current_gravity : float
 
@@ -62,7 +62,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	update_inputs()
 	
-	velocity.y += 10 # get_gravity() * delta
+	velocity.y += get_gravity() * delta
 	velocity.x = clamp(velocity.x + _input_dir.x * acceleration, -limit_speed, limit_speed)
 	
 	limit_speed = lerp(limit_speed, max_speed, 0.02)
@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	# Update visuals
 	update_sprite()
 	
-	#print("Velocity: ", velocity)
+	print("Velocity: ", velocity)
 
 
 func update_sprite() -> void:
@@ -136,7 +136,11 @@ func update_inputs() -> void:
 
 # Jump-related functions
 func get_gravity() -> float:
-	return _jump_gravity if velocity.y < 0.0 else _fall_gravity
+	if is_flying:
+		return 7 * (_jump_gravity if velocity.y < 0.0 else _fall_gravity)
+	
+	else:
+		return _jump_gravity if velocity.y < 0.0 else _fall_gravity
 
 
 func jump() -> void:
@@ -183,7 +187,11 @@ func apply_friction() -> void:
 		velocity.x = lerp(velocity.x, 0, on_floor_friction)
 		
 	else:
+		if is_flying:
+			velocity.y = lerp(velocity.y, 0, in_air_friction)
+		
 		velocity.x = lerp(velocity.x, 0, in_air_friction)
+
 
 
 func clamp_speed() -> void:
