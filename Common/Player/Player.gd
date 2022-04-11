@@ -47,7 +47,7 @@ var _snap_vector := _SNAP_DIR * _SNAP_VEC_LEN
 var velocity := Vector2.ZERO
 var _input_dir := Vector2.ZERO
 
-var is_flying := false
+var player_handles_movement := true
 
 # references
 onready var _sprite := $Sprite
@@ -62,13 +62,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	update_inputs()
 	
-	velocity.y += get_gravity() * delta
-	velocity.x = clamp(velocity.x + _input_dir.x * acceleration, -limit_speed, limit_speed)
-	
-	limit_speed = lerp(limit_speed, max_speed, 0.02)
-	
-	apply_friction()
-	clamp_speed()
+	if player_handles_movement:
+		player_movement(delta)
 	
 	if is_on_wall(): 
 		velocity = move_and_slide_with_snap(velocity, 
@@ -87,21 +82,20 @@ func _physics_process(delta: float) -> void:
 											  _MAX_SLOPE_ANGLE, 
 											  _has_infinite_inertia).y
 	
+#	print("Velocity: ", velocity)
+	
 	# Update visuals
 	update_sprite()
+
+
+func player_movement(delta: float) -> void:
+	velocity.y += get_gravity() * delta
+	velocity.x = clamp(velocity.x + _input_dir.x * acceleration, -limit_speed, limit_speed)
 	
-	print("Velocity: ", velocity)
-
-
-func update_sprite() -> void:
-	# sprite flipping
-	if _input_dir.x > 0:
-		_sprite.scale.x = 1
-		
-	elif _input_dir.x < 0:
-		_sprite.scale.x = -1
-		
-	# flip fishing rod
+	limit_speed = lerp(limit_speed, max_speed, 0.02)
+	
+	apply_friction()
+	clamp_speed()
 
 
 func update_inputs() -> void:
@@ -127,20 +121,28 @@ func update_inputs() -> void:
 			jump()
 		
 	else:
-		if is_flying:
+		if not player_handles_movement:
 			_snap_vector = Vector2.ZERO
 		
 		else:
 			_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
 
 
+func update_sprite() -> void:
+	# sprite flipping
+	if _input_dir.x > 0:
+		_sprite.scale.x = 1
+		
+	elif _input_dir.x < 0:
+		_sprite.scale.x = -1
+		
+	# flip fishing rod
+	# ...
+
+
 # Jump-related functions
 func get_gravity() -> float:
-	if is_flying:
-		return 7 * (_jump_gravity if velocity.y < 0.0 else _fall_gravity)
-	
-	else:
-		return _jump_gravity if velocity.y < 0.0 else _fall_gravity
+	return _jump_gravity if velocity.y < 0.0 else _fall_gravity
 
 
 func jump() -> void:
@@ -183,18 +185,12 @@ func set_jump_time_to_descent(value : float) -> void:
 # Speed-related functions
 func apply_friction() -> void:
 	if is_on_floor():
-		is_flying = false
 		velocity.x = lerp(velocity.x, 0, on_floor_friction)
 		
 	else:
-		if is_flying:
-			velocity.y = lerp(velocity.y, 0, in_air_friction)
-		
 		velocity.x = lerp(velocity.x, 0, in_air_friction)
-
 
 
 func clamp_speed() -> void:
 	velocity.x = clamp(velocity.x, -_TERMINAL_SPEED, _TERMINAL_SPEED)
 	velocity.y = clamp(velocity.y, -_TERMINAL_SPEED, _TERMINAL_SPEED)
-

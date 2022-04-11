@@ -6,6 +6,11 @@ extends KinematicBody2D
 class_name Hook
 
 
+# Signals:
+#---------------------------------------
+signal has_hooked
+
+
 # Variables:
 #---------------------------------------
 var _move_speed := 1000
@@ -20,15 +25,8 @@ var is_hooked := false
 # Functions:
 #---------------------------------------
 func _physics_process(delta: float) -> void:
-
-#	display_chain()
-	
-#	if _is_hooked:
-#		apply_tension()
-#
-#	else:
-
-	fly_hook(delta)
+	if not is_hooked:
+		fly_hook(delta)
 
 
 func fly_hook(delta: float):
@@ -39,6 +37,8 @@ func fly_hook(delta: float):
 	if collided:
 		is_hooked = true
 		_move_dir = Vector2.ZERO
+		
+		emit_signal("has_hooked")
 		
 #		self.rotation = collided.normal.angle() + deg2rad(180)
 #		display_chain()
