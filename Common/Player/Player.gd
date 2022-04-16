@@ -25,12 +25,10 @@ var limit_speed := max_speed
 export var on_floor_friction := 0.25
 export var in_air_friction := 0.2
 
-var _current_gravity : float
-
 # jump variables
 export var jump_height := 38.0 setget set_jump_height
 export var jump_time_to_peak := 0.4 setget set_jump_time_to_peak
-export var jump_time_to_descent := 0.35 setget set_jump_time_to_descent
+export var jump_time_to_descent := 0.4 setget set_jump_time_to_descent
 
 var _jump_velocity : float
 var _jump_gravity : float
@@ -48,6 +46,7 @@ var velocity := Vector2.ZERO
 var _input_dir := Vector2.ZERO
 
 var player_handles_movement := true
+var player_can_set_snap := true
 
 # references
 onready var _sprite := $Sprite
@@ -121,23 +120,22 @@ func update_inputs() -> void:
 			jump()
 		
 	else:
-		if not player_handles_movement:
-			_snap_vector = Vector2.ZERO
+		if player_handles_movement and player_can_set_snap:
+			_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
 		
 		else:
-			_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+			_snap_vector = Vector2.ZERO
 
 
 func update_sprite() -> void:
 	# sprite flipping
 	if _input_dir.x > 0:
 		_sprite.scale.x = 1
+		$ActiveTool.scale.x = 1
 		
 	elif _input_dir.x < 0:
 		_sprite.scale.x = -1
-		
-	# flip fishing rod
-	# ...
+		$ActiveTool.scale.x = -1
 
 
 # Jump-related functions
@@ -147,6 +145,7 @@ func get_gravity() -> float:
 
 func jump() -> void:
 	_snap_vector = Vector2.ZERO
+	
 	velocity.y -= velocity.y # to fix 'super jump' bug when going up slopes
 	velocity.y += _jump_velocity
 

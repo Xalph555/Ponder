@@ -11,13 +11,18 @@ export(PackedScene) var hook
 var _hook_instance : Hook
 
 # hook properties 
-export var line_length := 20.0
+export var min_line_length := 5.0
 export var hook_reel_speed := 150
 
+var _line_length := 0.0
+
 var _can_grapple := true
+var _can_reel := true
 
 var _distance_to_hook := 0.0
 var _hook_dir := Vector2.ZERO
+
+var pullback_vel := Vector2.ZERO
 
 # hook swing properties
 export var swing_force := 0.25
@@ -29,8 +34,19 @@ var angular_velocity := 0.0
 
 var _input_dir := Vector2.ZERO
 
+# rod properties 
+export var rod_start_angle := -45.0
+export var rod_throw_ang_offset := 100.0
+
+# scene references
+onready var _sprite := $PivotPoint/AnimationPivot/Sprite
+
 onready var _pivot_point := $PivotPoint
-onready var _hook_point := $PivotPoint/HookPoint
+onready var _hook_point := $PivotPoint/AnimationPivot/HookPoint
+
+onready var _anim_player := $AnimationPlayer
+onready var _anim_pivot := $PivotPoint/AnimationPivot
+
 onready var _tween := $Tween
 
 onready var parent = get_parent().get_parent() as Player
@@ -38,6 +54,10 @@ onready var parent = get_parent().get_parent() as Player
 
 # Functions:
 #---------------------------------------
+func _ready() -> void:
+	_pivot_point.rotation_degrees = rod_start_angle
+
+
 func _physics_process(delta: float) -> void:
 	update_input(delta)
 	update_sprite()
@@ -45,13 +65,13 @@ func _physics_process(delta: float) -> void:
 	if _hook_instance:
 		_distance_to_hook = _hook_instance.global_position.distance_to(_hook_point.global_position)
 		_hook_dir = (_hook_instance.global_position - _hook_point.global_position).normalized()
-		
+
 		if _hook_instance.is_hooked:
-			max_dist_adjust()
+			line_dist_adjust()
 			
-			if not parent.is_on_floor() and _distance_to_hook > line_length - 10:
+			if not parent.is_on_floor() and _distance_to_hook > max(1, _line_length - min_line_length):
 				if parent.player_handles_movement:
-					angular_velocity = sign(parent.velocity.x) * (parent.velocity.length() / line_length)
+					angular_velocity = sign(parent.velocity.x) * (parent.velocity.length() / _line_length)
 					parent.player_handles_movement = false
 					
 				apply_tension()
@@ -68,25 +88,38 @@ func update_input(delta: float) -> void:
 	
 	# charging rod
 	if Input.is_action_just_pressed("Action1") and _can_grapple:
-#		_tween.interpolate_property(_pivot_point, "rotation_degrees",
-#										45, -45,
-#										0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-#		_tween.start()
-#
-		# play throw animation
+		_anim_player.play("ThrowHook")
 		
-		throw_grapple()
+		var ang_to_mouse = _pivot_point.global_position.direction_to(get_global_mouse_position()).angle()
+		_tween.interpolate_property(_pivot_point, "rotation", 
+								_pivot_point.rotation, ang_to_mouse, 
+								0.2, Tween.TRANS_SINE,Tween.EASE_IN)
+		_tween.start()
+		
+#		print("Ang to Mouse: ", rad2deg(ang_to_mouse))
+#		print("Pivot Angle: ", _pivot_point.rotation_degrees)
 
 	# throw rod
 	if Input.is_action_just_released("Action1"):
+		_anim_player.stop()
 		release_grapple()
+		
+		_tween.interpolate_property(_pivot_point, "rotation_degrees", 
+								_pivot_point.rotation_degrees, rod_start_angle, 
+								0.3, Tween.TRANS_SINE,Tween.EASE_IN)
+		_tween.start()
+		
+		_tween.interpolate_property(_anim_pivot, "rotation", 
+								_anim_pivot.rotation, 0, 
+								0.3, Tween.TRANS_SINE,Tween.EASE_IN)
+		_tween.start()
 	
 	# reel hook
 	if Input.is_action_just_released("ui_scroll_up"):
-		line_length += hook_reel_speed * delta
+		_line_length += hook_reel_speed * delta
 	
-	if Input.is_action_just_released("ui_scroll_down"):
-		line_length = max(10, line_length - (hook_reel_speed * delta))
+	if Input.is_action_just_released("ui_scroll_down") and _can_reel:
+		_line_length = max(min_line_length, _line_length - (hook_reel_speed * delta))
 
 
 func update_sprite() -> void:
@@ -99,22 +132,19 @@ func throw_grapple() -> void:
 		_can_grapple = false
 		
 		var _mouse_dir = get_global_mouse_position() - _hook_point.global_position
-#		print(rad2deg(hook_dir.angle()))
 		_mouse_dir = _mouse_dir.normalized()
 		
-		#print(rad2deg(to_local(hook_dir).angle()))
-		
-		
-		# need to restrict hook direction to flat with hook and 75 degrees down it
-		
-		
-		_hook_instance = hook.instance()
-		_hook_instance.set_as_toplevel(true)
-		
-		_hook_instance.connect("has_hooked", self, "on_has_hooked")
-		
-		add_child(_hook_instance)
-		_hook_instance.shoot(parent, _hook_point.global_position, _mouse_dir)
+		spawn_hook(parent, _hook_point.global_position, _mouse_dir)
+
+
+func spawn_hook(user: KinematicBody2D, start_pos : Vector2, dir: Vector2) -> void:
+	_hook_instance = hook.instance()
+	_hook_instance.set_as_toplevel(true)
+	
+	_hook_instance.connect("has_hooked", self, "on_has_hooked")
+	
+	add_child(_hook_instance)
+	_hook_instance.shoot(user, start_pos, dir)
 
 
 func release_grapple() -> void:
@@ -128,10 +158,32 @@ func release_grapple() -> void:
 		parent.player_handles_movement = true
 
 
-func max_dist_adjust():
-	if _distance_to_hook > line_length:
-		var parent_origin_dist = self.global_position.distance_to(_hook_point.global_position)
-		parent.global_position = _hook_instance.global_position + (-1 * _hook_dir * (line_length + parent_origin_dist))
+func line_dist_adjust() -> void:
+	var parent_dir_hook = parent.global_position.direction_to(_hook_instance.global_position)
+	var hook_point_dir_hook = _hook_point.global_position.direction_to(_hook_instance.global_position)
+	
+	if parent_dir_hook.dot(hook_point_dir_hook) < 0:
+		print("not facing same dir")
+		return
+	
+	
+	# restrict movement
+	if _distance_to_hook > _line_length:
+		parent.player_can_set_snap = false
+		
+		pullback_vel = _hook_dir * (hook_reel_speed / 2)
+		parent.velocity = pullback_vel
+	
+	else:
+		parent.player_can_set_snap = true
+		pullback_vel = Vector2.ZERO
+	
+	# setting _can_reel
+	if _distance_to_hook > _line_length + 10:
+		_can_reel = false
+		
+	else:
+		_can_reel = true
 
 
 func apply_tension() -> void:
@@ -146,7 +198,7 @@ func apply_tension() -> void:
 #	print("ang velocity: ", angular_velocity)
 	
 	var p_hook_dir := Vector2(sign(angular_velocity) * -_hook_dir.y, sign(angular_velocity) * _hook_dir.x).normalized()
-	var s_force = p_hook_dir * (abs(angular_velocity) * line_length) 
+	var s_force = p_hook_dir * (abs(angular_velocity) * _line_length) + pullback_vel
 	
 #	print("s force: ", s_force)
 	
@@ -158,21 +210,12 @@ func apply_tension() -> void:
 #	print("speed: ", parent.velocity.length())
 	
 	
-	# adjust postion to max of line length
-	if not parent.is_on_floor():
-		if _distance_to_hook != line_length:
-			var parent_offset = self.global_position.distance_to(_hook_point.global_position)
-			var new_location = _hook_instance.global_position + (-1 * _hook_dir * (line_length + parent_offset))
-			
-			parent.global_position = lerp(parent.global_position, new_location, 0.5)
 	
-	
-	
-#	if _distance_to_hook > line_length:
+#	if _distance_to_hook > _line_length:
 #		var parent_origin_dist = self.global_position.distance_to(_hook_point.global_position)
-#		parent.global_position = _hook_instance.global_position + (-1 * _hook_dir * (line_length + parent_origin_dist))
+#		parent.global_position = _hook_instance.global_position + (-1 * _hook_dir * (_line_length + parent_origin_dist))
 #
-#	if _distance_to_hook < line_length - 10:
+#	if _distance_to_hook < _line_length - 10:
 #		var line_down_force := -1 * _hook_dir * 0.2
 #		parent.velocity += line_down_force
 	
@@ -185,7 +228,7 @@ func apply_tension() -> void:
 #	var angle_accel = abs(-swing_force * hook_ang)
 #
 #	var p_hook_dir := Vector2(sign(hook_ang) * -_hook_dir.y, sign(hook_ang) * _hook_dir.x).normalized()
-#	var s_force = p_hook_dir * (angle_accel * line_length)
+#	var s_force = p_hook_dir * (angle_accel * _line_length)
 #
 #	parent.limit_speed = parent.max_speed * 10
 #	parent.velocity += s_force
@@ -213,5 +256,5 @@ func apply_tension() -> void:
 
 # signal callbacks
 func on_has_hooked() -> void:
-	line_length = _distance_to_hook
+	_line_length = max(min_line_length, _distance_to_hook + min_line_length)
 
