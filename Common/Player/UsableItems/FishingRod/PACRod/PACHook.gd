@@ -3,7 +3,7 @@
 #--------------------------------------#
 extends KinematicBody2D
 
-class_name Hook
+class_name PACHook
 
 
 # Signals:
@@ -16,7 +16,6 @@ signal has_hooked
 var _move_speed := 1000
 
 var _move_dir := Vector2.ZERO
-var _hook_dir := Vector2.ZERO
 var _velocity := Vector2.ZERO
 
 var is_hooked := false
@@ -44,7 +43,7 @@ func fly_hook(delta: float):
 #		display_chain()
 
 
-func shoot(shooter: KinematicBody2D, pos : Vector2, dir: Vector2) -> void:
+func shoot(pos : Vector2, dir: Vector2) -> void:
 	global_position = pos
 	_move_dir = dir
 	
