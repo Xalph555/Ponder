@@ -1,0 +1,118 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Common/Player/UsableItems/FishingRod/FishingRod.png" type="Texture" id=1]
+[ext_resource path="res://Common/Player/UsableItems/FishingRod/CombinedRod/CombinedRod.gd" type="Script" id=2]
+[ext_resource path="res://Common/Player/UsableItems/FishingRod/ChargingRod/PhysicsHook.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Common/Player/UsableItems/FishingRod/PACRod/PACHook.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Animation" id=1]
+resource_name = "ChargeReady"
+length = 0.3
+step = 0.05
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("PivotPoint/AnimationPivot:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.3, -4.82611, -160, -0.1, 117.834, 0.2, -1.39816 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "start_charge"
+} ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "ThrowHookContinue"
+length = 0.5
+step = 0.05
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("PivotPoint/AnimationPivot:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.3, -4.82611, -160, -0.1, 117.834, 0.2, -1.39816, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.25, 0.5 )
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "throw_grapple"
+} ]
+}
+
+[sub_resource type="Animation" id=3]
+length = 0.25
+step = 0.05
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("PivotPoint/AnimationPivot:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( -160, -0.1, 117.834, 0.2, -1.39816, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.25 )
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.25 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "throw_grapple"
+} ]
+}
+
+[node name="CombinedRod" type="Node2D"]
+script = ExtResource( 2 )
+hook_physics = ExtResource( 3 )
+hook_continuous = ExtResource( 4 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+reset_on_save = false
+anims/ChargeReady = SubResource( 1 )
+anims/ThrowHookContinue = SubResource( 2 )
+anims/ThrowHookFirst = SubResource( 3 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="PivotPoint" type="Position2D" parent="."]
+
+[node name="AnimationPivot" type="Position2D" parent="PivotPoint"]
+
+[node name="Sprite" type="Sprite" parent="PivotPoint/AnimationPivot"]
+rotation = 1.5708
+texture = ExtResource( 1 )
+centered = false
+offset = Vector2( -1, -53 )
+
+[node name="HookPoint" type="Position2D" parent="PivotPoint/AnimationPivot"]
+position = Vector2( 51, 0 )

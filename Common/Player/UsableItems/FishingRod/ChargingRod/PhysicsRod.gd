@@ -44,7 +44,6 @@ var _input_dir := Vector2.ZERO
 
 # rod properties 
 export var rod_start_angle := -45.0
-export var rod_throw_ang_offset := 100.0
 
 # scene references
 onready var _sprite := $PivotPoint/AnimationPivot/Sprite
