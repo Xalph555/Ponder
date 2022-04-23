@@ -1,0 +1,316 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Common/UI/PIXEARG_.TTF" type="DynamicFontData" id=1]
+[ext_resource path="res://Common/UI/PropertySetter/PropertySetterNumeric.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Common/UI/PlayerPrototype/PlayerSettingsUI.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "InvalidChange"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("InvalidChangeTitle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InvalidChangeTitle:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.17 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 372, 278 ), Vector2( 380, 288 ), Vector2( 371, 295 ), Vector2( 363, 283 ), Vector2( 378, 287 ), Vector2( 381, 275 ), Vector2( 372, 278 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("InvalidChangeTitle:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 380, 288 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InvalidChangeTitle:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ValidChangeTitle:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "ValidChange"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("ValidChangeTitle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="DynamicFont" id=4]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=5]
+font_data = ExtResource( 1 )
+
+[node name="PlayerSettingsUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+reset_on_save = false
+anims/InvalidChange = SubResource( 1 )
+anims/RESET = SubResource( 2 )
+anims/ValidChange = SubResource( 3 )
+
+[node name="InvalidChangeTitle" type="Label" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -132.0
+margin_top = -12.0
+margin_right = 148.0
+margin_bottom = 32.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Invalid Change"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ValidChangeTitle" type="Label" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -174.0
+margin_top = -22.0
+margin_right = 174.0
+margin_bottom = 22.0
+custom_colors/font_color = Color( 0, 1, 0.298039, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Property Changed"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PropertySetters" type="VBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -287.0
+margin_top = 13.0
+margin_right = -15.0
+margin_bottom = 252.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SettingsTitle" type="Label" parent="PropertySetters"]
+margin_right = 272.0
+margin_bottom = 22.0
+custom_fonts/font = SubResource( 5 )
+text = "Player Settings:"
+align = 1
+
+[node name="Acceleration" parent="PropertySetters" instance=ExtResource( 2 )]
+margin_top = 26.0
+margin_right = 272.0
+margin_bottom = 53.0
+
+[node name="SettingTitle" parent="PropertySetters/Acceleration" index="0"]
+margin_left = 73.0
+margin_right = 173.0
+text = "Acceleration: "
+
+[node name="LineEdit" parent="PropertySetters/Acceleration" index="1"]
+margin_left = 177.0
+margin_right = 247.0
+
+[node name="Confirm" parent="PropertySetters/Acceleration" index="2"]
+margin_left = 251.0
+margin_right = 272.0
+
+[node name="MaxSpeed" parent="PropertySetters" instance=ExtResource( 2 )]
+margin_top = 57.0
+margin_right = 272.0
+margin_bottom = 84.0
+
+[node name="SettingTitle" parent="PropertySetters/MaxSpeed" index="0"]
+margin_left = 83.0
+margin_right = 173.0
+text = "Max Speed: "
+
+[node name="LineEdit" parent="PropertySetters/MaxSpeed" index="1"]
+margin_left = 177.0
+margin_right = 247.0
+
+[node name="Confirm" parent="PropertySetters/MaxSpeed" index="2"]
+margin_left = 251.0
+margin_right = 272.0
+focus_mode = 2
+
+[node name="FloorFriction" parent="PropertySetters" instance=ExtResource( 2 )]
+margin_top = 88.0
+margin_right = 272.0
+margin_bottom = 115.0
+
+[node name="SettingTitle" parent="PropertySetters/FloorFriction" index="0"]
+margin_left = 71.0
+margin_right = 173.0
+text = "Floor Friction: "
+
+[node name="LineEdit" parent="PropertySetters/FloorFriction" index="1"]
+margin_left = 177.0
+margin_right = 247.0
+
+[node name="Confirm" parent="PropertySetters/FloorFriction" index="2"]
+margin_left = 251.0
+margin_right = 272.0
+focus_mode = 2
+
+[node name="AirFriction" parent="PropertySetters" instance=ExtResource( 2 )]
+margin_top = 119.0
+margin_right = 272.0
+margin_bottom = 146.0
+
+[node name="SettingTitle" parent="PropertySetters/AirFriction" index="0"]
+margin_left = 86.0
+margin_right = 173.0
+text = "Air Friction: "
+
+[node name="LineEdit" parent="PropertySetters/AirFriction" index="1"]
+margin_left = 177.0
+margin_right = 247.0
+
+[node name="Confirm" parent="PropertySetters/AirFriction" index="2"]
+margin_left = 251.0
+margin_right = 272.0
+focus_mode = 2
+
+[node name="JumpHeight" parent="PropertySetters" instance=ExtResource( 2 )]
+margin_top = 150.0
+margin_right = 272.0
+margin_bottom = 177.0
+
+[node name="SettingTitle" parent="PropertySetters/JumpHeight" index="0"]
+margin_left = 76.0
+margin_right = 173.0
+text = "Jump Height: "
+
+[node name="LineEdit" parent="PropertySetters/JumpHeight" index="1"]
+margin_left = 177.0
+margin_right = 247.0
+
+[node name="Confirm" parent="PropertySetters/JumpHeight" index="2"]
+margin_left = 251.0
+margin_right = 272.0
+focus_mode = 2
+
+[node name="JumpTimeToPeak" parent="PropertySetters" instance=ExtResource( 2 )]
+margin_top = 181.0
+margin_right = 272.0
+margin_bottom = 208.0
+
+[node name="SettingTitle" parent="PropertySetters/JumpTimeToPeak" index="0"]
+margin_left = 26.0
+margin_right = 173.0
+text = "Jump Time To Peak: "
+
+[node name="LineEdit" parent="PropertySetters/JumpTimeToPeak" index="1"]
+margin_left = 177.0
+margin_right = 247.0
+
+[node name="Confirm" parent="PropertySetters/JumpTimeToPeak" index="2"]
+margin_left = 251.0
+margin_right = 272.0
+focus_mode = 2
+
+[node name="JumpTimeToDescent" parent="PropertySetters" instance=ExtResource( 2 )]
+margin_top = 212.0
+margin_right = 272.0
+margin_bottom = 239.0
+
+[node name="SettingTitle" parent="PropertySetters/JumpTimeToDescent" index="0"]
+margin_right = 173.0
+text = "Jump Time To Descent: "
+
+[node name="LineEdit" parent="PropertySetters/JumpTimeToDescent" index="1"]
+margin_left = 177.0
+margin_right = 247.0
+
+[node name="Confirm" parent="PropertySetters/JumpTimeToDescent" index="2"]
+margin_left = 251.0
+margin_right = 272.0
+focus_mode = 2
+
+[connection signal="invalid_change" from="PropertySetters/Acceleration" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/Acceleration" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/MaxSpeed" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/MaxSpeed" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/FloorFriction" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/FloorFriction" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/AirFriction" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/AirFriction" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/JumpHeight" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/JumpHeight" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/JumpTimeToPeak" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/JumpTimeToPeak" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/JumpTimeToDescent" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/JumpTimeToDescent" to="." method="_on_valid_change"]
+
+[editable path="PropertySetters/Acceleration"]
+[editable path="PropertySetters/MaxSpeed"]
+[editable path="PropertySetters/FloorFriction"]
+[editable path="PropertySetters/AirFriction"]
+[editable path="PropertySetters/JumpHeight"]
+[editable path="PropertySetters/JumpTimeToPeak"]
+[editable path="PropertySetters/JumpTimeToDescent"]

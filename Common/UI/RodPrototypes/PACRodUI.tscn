@@ -1,78 +1,265 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Common/UI/RodPrototypes/PixelArialFont.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Common/UI/PropertySetter/PropertySetterNumeric.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Common/UI/PIXEARG_.TTF" type="DynamicFontData" id=2]
+[ext_resource path="res://Common/UI/RodPrototypes/PACRodUI.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "InvalidChange"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("InvalidChangeTitle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InvalidChangeTitle:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.17 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 372, 278 ), Vector2( 380, 288 ), Vector2( 371, 295 ), Vector2( 363, 283 ), Vector2( 378, 287 ), Vector2( 381, 275 ), Vector2( 372, 278 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("InvalidChangeTitle:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 380, 288 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InvalidChangeTitle:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ValidChangeTitle:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "ValidChange"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("ValidChangeTitle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 2 )
 
 [node name="PACRodUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_left = 1.0
-margin_top = 7.0
-margin_right = 130.0
-margin_bottom = 113.0
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+reset_on_save = false
+anims/InvalidChange = SubResource( 1 )
+anims/RESET = SubResource( 2 )
+anims/ValidChange = SubResource( 5 )
+
+[node name="InvalidChangeTitle" type="Label" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -132.0
+margin_top = -12.0
+margin_right = 148.0
+margin_bottom = 32.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Invalid Change"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SettingItemButtons" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 137.0
-margin_bottom = 17.0
+[node name="ValidChangeTitle" type="Label" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -174.0
+margin_top = -22.0
+margin_right = 174.0
+margin_bottom = 22.0
+custom_colors/font_color = Color( 0, 1, 0.298039, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Property Changed"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="SettingTitle" type="Label" parent="VBoxContainer/SettingItemButtons"]
-margin_top = 3.0
-margin_right = 65.0
-margin_bottom = 14.0
-custom_fonts/font = ExtResource( 1 )
-text = "Some Setting:"
+[node name="PropertySetters" type="VBoxContainer" parent="."]
+margin_left = 9.0
+margin_top = 8.0
+margin_right = 242.0
+margin_bottom = 159.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="SettingValue" type="Label" parent="VBoxContainer/SettingItemButtons"]
-margin_left = 69.0
-margin_top = 3.0
-margin_right = 87.0
-margin_bottom = 14.0
-custom_fonts/font = ExtResource( 1 )
-text = "250"
+[node name="SettingsTitle" type="Label" parent="PropertySetters"]
+margin_right = 241.0
+margin_bottom = 22.0
+custom_fonts/font = SubResource( 4 )
+text = "PACRod Properties:"
+align = 1
 
-[node name="Increase" type="Button" parent="VBoxContainer/SettingItemButtons"]
-margin_left = 91.0
-margin_right = 109.0
-margin_bottom = 17.0
-custom_fonts/font = ExtResource( 1 )
-text = "+"
+[node name="MinLineLength" parent="PropertySetters" instance=ExtResource( 1 )]
+margin_top = 26.0
+margin_right = 241.0
+margin_bottom = 53.0
 
-[node name="Decrease" type="Button" parent="VBoxContainer/SettingItemButtons"]
-margin_left = 113.0
-margin_right = 129.0
-margin_bottom = 17.0
-custom_fonts/font = ExtResource( 1 )
-text = "-"
+[node name="SettingTitle" parent="PropertySetters/MinLineLength" index="0"]
+margin_left = 20.0
+margin_right = 142.0
+text = "Min Line Lenght: "
 
-[node name="SettingItemTextChange" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 21.0
-margin_right = 137.0
-margin_bottom = 42.0
+[node name="LineEdit" parent="PropertySetters/MinLineLength" index="1"]
+margin_left = 146.0
+margin_right = 216.0
 
-[node name="SettingTitle" type="Label" parent="VBoxContainer/SettingItemTextChange"]
-margin_top = 5.0
-margin_right = 65.0
-margin_bottom = 16.0
-custom_fonts/font = ExtResource( 1 )
-text = "Some Setting:"
+[node name="Confirm" parent="PropertySetters/MinLineLength" index="2"]
+margin_left = 220.0
+margin_right = 241.0
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/SettingItemTextChange"]
-margin_left = 69.0
-margin_right = 115.0
-margin_bottom = 21.0
-custom_fonts/font = ExtResource( 1 )
-text = "250"
+[node name="HookReelSpeed" parent="PropertySetters" instance=ExtResource( 1 )]
+margin_top = 57.0
+margin_right = 241.0
+margin_bottom = 84.0
 
-[node name="Confirm" type="Button" parent="VBoxContainer/SettingItemTextChange"]
-margin_left = 119.0
-margin_right = 137.0
-margin_bottom = 21.0
-custom_fonts/font = ExtResource( 1 )
-text = ">"
+[node name="SettingTitle" parent="PropertySetters/HookReelSpeed" index="0"]
+margin_left = 8.0
+margin_right = 142.0
+text = "Hook Reel Speed: "
+
+[node name="LineEdit" parent="PropertySetters/HookReelSpeed" index="1"]
+margin_left = 146.0
+margin_right = 216.0
+
+[node name="Confirm" parent="PropertySetters/HookReelSpeed" index="2"]
+margin_left = 220.0
+margin_right = 241.0
+
+[node name="SwingForce" parent="PropertySetters" instance=ExtResource( 1 )]
+margin_top = 88.0
+margin_right = 241.0
+margin_bottom = 115.0
+
+[node name="SettingTitle" parent="PropertySetters/SwingForce" index="0"]
+margin_left = 40.0
+margin_right = 142.0
+text = "Swing Force: "
+
+[node name="LineEdit" parent="PropertySetters/SwingForce" index="1"]
+margin_left = 146.0
+margin_right = 216.0
+
+[node name="Confirm" parent="PropertySetters/SwingForce" index="2"]
+margin_left = 220.0
+margin_right = 241.0
+
+[node name="PushForce" parent="PropertySetters" instance=ExtResource( 1 )]
+margin_top = 119.0
+margin_right = 241.0
+margin_bottom = 146.0
+
+[node name="SettingTitle" parent="PropertySetters/PushForce" index="0"]
+margin_left = 51.0
+margin_right = 142.0
+text = "Push Force: "
+
+[node name="LineEdit" parent="PropertySetters/PushForce" index="1"]
+margin_left = 146.0
+margin_right = 216.0
+
+[node name="Confirm" parent="PropertySetters/PushForce" index="2"]
+margin_left = 220.0
+margin_right = 241.0
+
+[node name="MaxSwingSpeed" parent="PropertySetters" instance=ExtResource( 1 )]
+margin_top = 150.0
+margin_right = 241.0
+margin_bottom = 177.0
+
+[node name="SettingTitle" parent="PropertySetters/MaxSwingSpeed" index="0"]
+margin_right = 142.0
+text = "Max Swing Speed: "
+
+[node name="LineEdit" parent="PropertySetters/MaxSwingSpeed" index="1"]
+margin_left = 146.0
+margin_right = 216.0
+
+[node name="Confirm" parent="PropertySetters/MaxSwingSpeed" index="2"]
+margin_left = 220.0
+margin_right = 241.0
+
+[connection signal="invalid_change" from="PropertySetters/MinLineLength" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/MinLineLength" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/HookReelSpeed" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/HookReelSpeed" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/SwingForce" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/SwingForce" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/PushForce" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/PushForce" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/MaxSwingSpeed" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/MaxSwingSpeed" to="." method="_on_valid_change"]
+
+[editable path="PropertySetters/MinLineLength"]
+[editable path="PropertySetters/HookReelSpeed"]
+[editable path="PropertySetters/SwingForce"]
+[editable path="PropertySetters/PushForce"]
+[editable path="PropertySetters/MaxSwingSpeed"]
