@@ -16,7 +16,7 @@ func _on_ExportButton_button_up() -> void:
 	var text_file = File.new()
 	
 	var export_count = 0
-	var file_name = "PACRodSettings{id}"
+	var file_name = "PhysicsRodSettings{id}"
 	
 	while text_file.file_exists("user://%s.txt" % file_name.format({"id": str(export_count)})):
 		export_count += 1
@@ -24,7 +24,7 @@ func _on_ExportButton_button_up() -> void:
 	file_name = file_name.format({"id": str(export_count)})
 	text_file.open("user://%s.txt" % file_name, File.WRITE)
 	
-	text_file.store_line("PAC Rod Settings:")
+	text_file.store_line("Physics Rod Settings:")
 	
 	for i in _property_containers.get_children():
 		var property_setting = str(i.target_setting) + ": " + str(i.current_setting)

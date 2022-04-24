@@ -2,8 +2,8 @@
 
 [ext_resource path="res://Common/UI/PropertySetter/PropertySetterNumeric.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Common/UI/PIXEARG_.TTF" type="DynamicFontData" id=2]
-[ext_resource path="res://Common/UI/RodPrototypes/PACRodUI.gd" type="Script" id=3]
-[ext_resource path="res://Common/UI/PixelArialFont.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Common/UI/PixelArialFont.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Common/UI/RodPrototypes/PhysicsRodUI.gd" type="Script" id=4]
 
 [sub_resource type="Animation" id=1]
 resource_name = "InvalidChange"
@@ -72,7 +72,7 @@ tracks/2/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=3]
 resource_name = "ValidChange"
 length = 0.3
 tracks/0/type = "value"
@@ -88,18 +88,18 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=4]
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=5]
 font_data = ExtResource( 2 )
 
-[node name="PACRodUI" type="Control"]
+[node name="PhysicsRodUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -108,7 +108,7 @@ __meta__ = {
 reset_on_save = false
 anims/InvalidChange = SubResource( 1 )
 anims/RESET = SubResource( 2 )
-anims/ValidChange = SubResource( 5 )
+anims/ValidChange = SubResource( 3 )
 
 [node name="InvalidChangeTitle" type="Label" parent="."]
 visible = false
@@ -121,7 +121,7 @@ margin_top = -12.0
 margin_right = 148.0
 margin_bottom = 32.0
 custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
 text = "Invalid Change"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -138,7 +138,7 @@ margin_top = -22.0
 margin_right = 174.0
 margin_bottom = 22.0
 custom_colors/font_color = Color( 0, 1, 0.298039, 1 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
 text = "Property Changed"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -154,109 +154,171 @@ __meta__ = {
 }
 
 [node name="SettingsTitle" type="Label" parent="PropertySetters"]
-margin_right = 241.0
+margin_right = 287.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 4 )
-text = "PACRod Properties:"
+custom_fonts/font = SubResource( 5 )
+text = "Physics Rod Properties:"
 align = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PropertySetters"]
 margin_top = 26.0
-margin_right = 241.0
-margin_bottom = 177.0
+margin_right = 287.0
+margin_bottom = 270.0
 
 [node name="MinLineLength" parent="PropertySetters/VBoxContainer" instance=ExtResource( 1 )]
-margin_right = 241.0
+margin_right = 287.0
 
 [node name="SettingTitle" parent="PropertySetters/VBoxContainer/MinLineLength" index="0"]
-margin_left = 20.0
-margin_right = 142.0
+margin_left = 66.0
+margin_right = 188.0
 text = "Min Line Lenght: "
 
 [node name="LineEdit" parent="PropertySetters/VBoxContainer/MinLineLength" index="1"]
-margin_left = 146.0
-margin_right = 216.0
+margin_left = 192.0
+margin_right = 262.0
 
 [node name="Confirm" parent="PropertySetters/VBoxContainer/MinLineLength" index="2"]
-margin_left = 220.0
-margin_right = 241.0
+margin_left = 266.0
+margin_right = 287.0
+focus_mode = 2
 
 [node name="HookReelSpeed" parent="PropertySetters/VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 31.0
-margin_right = 241.0
+margin_right = 287.0
 margin_bottom = 58.0
 
 [node name="SettingTitle" parent="PropertySetters/VBoxContainer/HookReelSpeed" index="0"]
-margin_left = 8.0
-margin_right = 142.0
+margin_left = 54.0
+margin_right = 188.0
 text = "Hook Reel Speed: "
 
 [node name="LineEdit" parent="PropertySetters/VBoxContainer/HookReelSpeed" index="1"]
-margin_left = 146.0
-margin_right = 216.0
+margin_left = 192.0
+margin_right = 262.0
 
 [node name="Confirm" parent="PropertySetters/VBoxContainer/HookReelSpeed" index="2"]
-margin_left = 220.0
-margin_right = 241.0
+margin_left = 266.0
+margin_right = 287.0
+focus_mode = 2
 
 [node name="SwingForce" parent="PropertySetters/VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 62.0
-margin_right = 241.0
+margin_right = 287.0
 margin_bottom = 89.0
 
 [node name="SettingTitle" parent="PropertySetters/VBoxContainer/SwingForce" index="0"]
-margin_left = 40.0
-margin_right = 142.0
+margin_left = 86.0
+margin_right = 188.0
 text = "Swing Force: "
 
 [node name="LineEdit" parent="PropertySetters/VBoxContainer/SwingForce" index="1"]
-margin_left = 146.0
-margin_right = 216.0
+margin_left = 192.0
+margin_right = 262.0
 
 [node name="Confirm" parent="PropertySetters/VBoxContainer/SwingForce" index="2"]
-margin_left = 220.0
-margin_right = 241.0
+margin_left = 266.0
+margin_right = 287.0
+focus_mode = 2
 
 [node name="PushForce" parent="PropertySetters/VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 93.0
-margin_right = 241.0
+margin_right = 287.0
 margin_bottom = 120.0
 
 [node name="SettingTitle" parent="PropertySetters/VBoxContainer/PushForce" index="0"]
-margin_left = 51.0
-margin_right = 142.0
+margin_left = 97.0
+margin_right = 188.0
 text = "Push Force: "
 
 [node name="LineEdit" parent="PropertySetters/VBoxContainer/PushForce" index="1"]
-margin_left = 146.0
-margin_right = 216.0
+margin_left = 192.0
+margin_right = 262.0
 
 [node name="Confirm" parent="PropertySetters/VBoxContainer/PushForce" index="2"]
-margin_left = 220.0
-margin_right = 241.0
+margin_left = 266.0
+margin_right = 287.0
+focus_mode = 2
 
 [node name="MaxSwingSpeed" parent="PropertySetters/VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 124.0
-margin_right = 241.0
+margin_right = 287.0
 margin_bottom = 151.0
 
 [node name="SettingTitle" parent="PropertySetters/VBoxContainer/MaxSwingSpeed" index="0"]
-margin_right = 142.0
+margin_left = 46.0
+margin_right = 188.0
 text = "Max Swing Speed: "
 
 [node name="LineEdit" parent="PropertySetters/VBoxContainer/MaxSwingSpeed" index="1"]
-margin_left = 146.0
-margin_right = 216.0
+margin_left = 192.0
+margin_right = 262.0
 
 [node name="Confirm" parent="PropertySetters/VBoxContainer/MaxSwingSpeed" index="2"]
-margin_left = 220.0
-margin_right = 241.0
+margin_left = 266.0
+margin_right = 287.0
+focus_mode = 2
+
+[node name="BaseHookThrowForce" parent="PropertySetters/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 155.0
+margin_right = 287.0
+margin_bottom = 182.0
+
+[node name="SettingTitle" parent="PropertySetters/VBoxContainer/BaseHookThrowForce" index="0"]
+margin_right = 188.0
+text = "Base Hook Throw Force: "
+
+[node name="LineEdit" parent="PropertySetters/VBoxContainer/BaseHookThrowForce" index="1"]
+margin_left = 192.0
+margin_right = 262.0
+
+[node name="Confirm" parent="PropertySetters/VBoxContainer/BaseHookThrowForce" index="2"]
+margin_left = 266.0
+margin_right = 287.0
+focus_mode = 2
+
+[node name="MaxHookThrowForce" parent="PropertySetters/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 186.0
+margin_right = 287.0
+margin_bottom = 213.0
+
+[node name="SettingTitle" parent="PropertySetters/VBoxContainer/MaxHookThrowForce" index="0"]
+margin_left = 8.0
+margin_right = 188.0
+text = "Max Hook Throw Force: "
+
+[node name="LineEdit" parent="PropertySetters/VBoxContainer/MaxHookThrowForce" index="1"]
+margin_left = 192.0
+margin_right = 262.0
+
+[node name="Confirm" parent="PropertySetters/VBoxContainer/MaxHookThrowForce" index="2"]
+margin_left = 266.0
+margin_right = 287.0
+focus_mode = 2
+
+[node name="ChargeRate" parent="PropertySetters/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 217.0
+margin_right = 287.0
+margin_bottom = 244.0
+
+[node name="SettingTitle" parent="PropertySetters/VBoxContainer/ChargeRate" index="0"]
+margin_left = 88.0
+margin_right = 188.0
+text = "Charge Rate: "
+
+[node name="LineEdit" parent="PropertySetters/VBoxContainer/ChargeRate" index="1"]
+margin_left = 192.0
+margin_right = 262.0
+
+[node name="Confirm" parent="PropertySetters/VBoxContainer/ChargeRate" index="2"]
+margin_left = 266.0
+margin_right = 287.0
+focus_mode = 2
 
 [node name="ExportButton" type="Button" parent="PropertySetters"]
-margin_top = 181.0
-margin_right = 241.0
-margin_bottom = 204.0
-custom_fonts/font = ExtResource( 4 )
+margin_top = 274.0
+margin_right = 287.0
+margin_bottom = 297.0
+custom_fonts/font = ExtResource( 3 )
 text = "Export Settings"
 
 [connection signal="invalid_change" from="PropertySetters/VBoxContainer/MinLineLength" to="." method="_on_invalid_change"]
@@ -269,6 +331,12 @@ text = "Export Settings"
 [connection signal="valid_change" from="PropertySetters/VBoxContainer/PushForce" to="." method="_on_valid_change"]
 [connection signal="invalid_change" from="PropertySetters/VBoxContainer/MaxSwingSpeed" to="." method="_on_invalid_change"]
 [connection signal="valid_change" from="PropertySetters/VBoxContainer/MaxSwingSpeed" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/VBoxContainer/BaseHookThrowForce" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/VBoxContainer/BaseHookThrowForce" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/VBoxContainer/MaxHookThrowForce" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/VBoxContainer/MaxHookThrowForce" to="." method="_on_valid_change"]
+[connection signal="invalid_change" from="PropertySetters/VBoxContainer/ChargeRate" to="." method="_on_invalid_change"]
+[connection signal="valid_change" from="PropertySetters/VBoxContainer/ChargeRate" to="." method="_on_valid_change"]
 [connection signal="button_up" from="PropertySetters/ExportButton" to="." method="_on_ExportButton_button_up"]
 
 [editable path="PropertySetters/VBoxContainer/MinLineLength"]
@@ -276,3 +344,6 @@ text = "Export Settings"
 [editable path="PropertySetters/VBoxContainer/SwingForce"]
 [editable path="PropertySetters/VBoxContainer/PushForce"]
 [editable path="PropertySetters/VBoxContainer/MaxSwingSpeed"]
+[editable path="PropertySetters/VBoxContainer/BaseHookThrowForce"]
+[editable path="PropertySetters/VBoxContainer/MaxHookThrowForce"]
+[editable path="PropertySetters/VBoxContainer/ChargeRate"]

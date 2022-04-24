@@ -11,8 +11,5 @@ tile_data = PoolIntArray( -1966174, 4, 0, -1966173, 4, 0, -1966172, 4, 0, -19661
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( -697, -275 )
 
-[node name="Camera2D" parent="Player" index="0"]
-current = true
-
 [editable path="Player"]
 [editable path="Player/HurtBox"]
