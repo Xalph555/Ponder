@@ -213,50 +213,6 @@ func apply_tension() -> void:
 		parent.velocity = parent.velocity.normalized() * max_swing_speed
 	
 #	print("speed: ", parent.velocity.length())
-	
-	
-	
-#	if _distance_to_hook > _line_length:
-#		var parent_origin_dist = self.global_position.distance_to(_hook_point.global_position)
-#		parent.global_position = _hook_instance.global_position + (-1 * _hook_dir * (_line_length + parent_origin_dist))
-#
-#	if _distance_to_hook < _line_length - 10:
-#		var line_down_force := -1 * _hook_dir * 0.2
-#		parent.velocity += line_down_force
-	
-	
-#	parent.is_flying = true
-##	parent.velocity.y = lerp(parent.velocity.y, 0, 0.08)
-#
-#	# applying pendulum angle acceleration
-#	var hook_ang = -cos(_hook_instance.global_position.direction_to(_hook_point.global_position).angle())
-#	var angle_accel = abs(-swing_force * hook_ang)
-#
-#	var p_hook_dir := Vector2(sign(hook_ang) * -_hook_dir.y, sign(hook_ang) * _hook_dir.x).normalized()
-#	var s_force = p_hook_dir * (angle_accel * _line_length)
-#
-#	parent.limit_speed = parent.max_speed * 10
-#	parent.velocity += s_force
-#
-##	var hook_ang = _hook_point.global_position.direction_to(_hook_instance.global_position).angle()
-##	var ang_accel = -5 * cos(hook_ang)
-##	ang_accel += _input_dir.x * 0.08
-##
-##	_hook_ang_vel += ang_accel
-##	_hook_ang_vel *= 0.99
-##
-##	var p_hook_dir := Vector2(sign(_hook_ang_vel) * -_hook_dir.y, sign(ang_accel) * _hook_dir.x)
-##	var s_force = p_hook_dir * abs(_hook_ang_vel)
-##
-##	parent.velocity += s_force
-#
-
-#	# swinging without pendulum physics
-##	if _input_dir.x != 0:
-##		var p_hook_dir := Vector2(sign(_input_dir.x) * -_hook_dir.y, sign(_input_dir.x) * _hook_dir.x)
-##		var s_force := p_hook_dir * swing_force
-##
-##		parent.velocity += s_force
 
 
 # signal callbacks

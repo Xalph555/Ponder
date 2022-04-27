@@ -110,6 +110,16 @@ anims/InvalidChange = SubResource( 1 )
 anims/RESET = SubResource( 2 )
 anims/ValidChange = SubResource( 5 )
 
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 0.254
+anchor_bottom = 0.377
+margin_right = -0.0960083
+margin_bottom = -0.199997
+color = Color( 0, 0, 0, 0.313726 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="InvalidChangeTitle" type="Label" parent="."]
 visible = false
 anchor_left = 0.5
