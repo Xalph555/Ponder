@@ -26,6 +26,8 @@ func _on_ExportButton_button_up() -> void:
 	
 	text_file.store_line("Combined Rod Settings:")
 	
+	OS.clipboard = "Test Copy Text"
+	
 	for i in _property_containers.get_children():
 		var property_setting = str(i.target_setting) + ": " + str(i.current_setting)
 		text_file.store_line(property_setting)

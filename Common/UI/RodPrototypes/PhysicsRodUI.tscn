@@ -181,7 +181,7 @@ margin_right = 287.0
 [node name="SettingTitle" parent="PropertySetters/VBoxContainer/MinLineLength" index="0"]
 margin_left = 66.0
 margin_right = 188.0
-text = "Min Line Lenght: "
+text = "Min Line Length: "
 
 [node name="LineEdit" parent="PropertySetters/VBoxContainer/MinLineLength" index="1"]
 margin_left = 192.0
