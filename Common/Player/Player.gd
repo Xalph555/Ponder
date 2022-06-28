@@ -20,7 +20,7 @@ const _MAX_SLOPE_ANGLE := deg2rad(46)
 export var acceleration:= 50
 export var max_speed := 400
 
-var limit_speed := max_speed
+onready var limit_speed := max_speed
 
 export var on_floor_friction := 0.25
 export var in_air_friction := 0.2

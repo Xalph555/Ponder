@@ -8,17 +8,16 @@ class_name Hitbox
 
 # Variables:
 #---------------------------------------
-export(float) var damage = 0
-export(float) var knock_back_force = 0
-
-onready var _collision_shape := $CollisionShape2D
+var parent
 
 
 # Functions:
 #---------------------------------------
 func disable_hit_box() -> void:
-	_collision_shape.disabled = true
+	#_collision_shape.disabled = true
+	monitoring = false
 
 
 func enable_hit_box() -> void:
-	_collision_shape.disabled = false
+	#_collision_shape.disabled = false
+	monitoring = true

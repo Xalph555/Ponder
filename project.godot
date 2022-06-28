@@ -19,6 +19,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Areas/HitHurtBox/HurtBox.gd"
 }, {
+"base": "Node2D",
+"class": "LeafItem",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/Leaf/LeafItem.gd"
+}, {
+"base": "StaticBody2D",
+"class": "LeafObject",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/Leaf/LeafObject.gd"
+}, {
 "base": "Control",
 "class": "LevelSwitcher",
 "language": "GDScript",
@@ -43,15 +53,29 @@ _global_script_classes=[ {
 "class": "PropertySetterNumeric",
 "language": "GDScript",
 "path": "res://Common/UI/PropertySetter/PropertySetterNumeric.gd"
+}, {
+"base": "Node2D",
+"class": "RingItem",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/Ring/RingItem.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "RingObject",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/Ring/RingObject.gd"
 } ]
 _global_script_class_icons={
 "Hitbox": "",
 "Hurtbox": "",
+"LeafItem": "",
+"LeafObject": "",
 "LevelSwitcher": "",
 "PACHook": "",
 "PhysicsHook": "",
 "Player": "",
-"PropertySetterNumeric": ""
+"PropertySetterNumeric": "",
+"RingItem": "",
+"RingObject": ""
 }
 
 [application]
@@ -148,6 +172,7 @@ ResetLevel={
 
 2d_physics/layer_1="Ground"
 2d_physics/layer_10="Player"
+2d_physics/layer_15="Breakable"
 
 [physics]
 
