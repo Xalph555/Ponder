@@ -8,7 +8,6 @@ radius = 4.00004
 height = 37.9999
 
 [node name="LeafObject" type="StaticBody2D"]
-collision_layer = 0
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]

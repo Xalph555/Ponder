@@ -10,6 +10,7 @@ class_name RingItem
 # Variables:
 #---------------------------------------
 export(PackedScene) var ring_object
+export(Vector2) var position_offset := Vector2(0, -5)
 
 var _ring_instance : RingObject
 
@@ -34,7 +35,7 @@ func spawn_ring() -> void:
 		
 		get_tree().get_root().add_child(_ring_instance)
 		
-		_ring_instance.set_up_ring(parent, parent.velocity, parent.global_position)
+		_ring_instance.set_up_ring(parent, parent.velocity, parent.global_position, position_offset)
 
 
 func destroy_ring() -> void:

@@ -8,8 +8,6 @@ class_name RingObject
 
 # Variables:
 #---------------------------------------
-export(Vector2) var position_offset := Vector2(0, -5)
-
 export(float) var max_vertical_speed := 1000.0
 export(float) var vertical_accel := 30.0
 
@@ -21,6 +19,8 @@ export(float) var base_damage := 0.08
 var velocity := Vector2.ZERO
 var _input_dir := Vector2.ZERO
 
+var position_offset := Vector2.ZERO
+
 var parent : Player
 
 onready var _ground_collider := $RayCast2D
@@ -28,10 +28,11 @@ onready var _ground_collider := $RayCast2D
 
 # Functions:
 #---------------------------------------
-func set_up_ring(ring_parent : Node, parent_velocity : Vector2, global_pos : Vector2) -> void:
+func set_up_ring(ring_parent : Node, parent_velocity : Vector2, global_pos : Vector2, offset_pos : Vector2) -> void:
 	parent = ring_parent
 	velocity = parent_velocity
 	global_position = global_pos
+	position_offset = offset_pos
 
 
 func _physics_process(delta: float) -> void:
