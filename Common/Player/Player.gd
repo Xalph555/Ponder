@@ -193,3 +193,8 @@ func apply_friction() -> void:
 func clamp_speed() -> void:
 	velocity.x = clamp(velocity.x, -_TERMINAL_SPEED, _TERMINAL_SPEED)
 	velocity.y = clamp(velocity.y, -_TERMINAL_SPEED, _TERMINAL_SPEED)
+
+
+# other
+func apply_wind(wind_force : Vector2) -> void:
+	velocity += wind_force

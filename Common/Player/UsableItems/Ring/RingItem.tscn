@@ -6,3 +6,4 @@
 [node name="RingItem" type="Node2D"]
 script = ExtResource( 1 )
 ring_object = ExtResource( 2 )
+position_offset = Vector2( 0, -15 )

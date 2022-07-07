@@ -6,7 +6,7 @@
 radius = 7.0
 
 [node name="RingObject" type="KinematicBody2D"]
-collision_layer = 0
+collision_layer = 512
 script = ExtResource( 1 )
 
 [node name="TempSprite" type="Polygon2D" parent="."]

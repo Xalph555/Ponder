@@ -1,7 +1,6 @@
 #--------------------------------------#
 # Ring Item Script                     #
 #--------------------------------------#
-
 extends Node2D
 
 class_name RingItem
@@ -44,3 +43,4 @@ func destroy_ring() -> void:
 		parent.velocity = _ring_instance.velocity
 		
 		_ring_instance.call_deferred("free")
+

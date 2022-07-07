@@ -1,8 +1,7 @@
 #--------------------------------------#
 # Leaf Object Script                   #
 #--------------------------------------#
-
-extends StaticBody2D
+extends KinematicBody2D
 
 class_name LeafObject
 
@@ -21,6 +20,8 @@ onready var limit_speed := max_speed
 export(float) var in_air_friction_x := 0.009
 export(float) var in_air_friction_y := 0.035
 
+export(float) var wind_force_multiplier := 4.0
+
 var velocity := Vector2.ZERO
 var _input_dir := Vector2.ZERO
 
@@ -28,6 +29,8 @@ var parent : Player
 
 var _just_entered_gliding := false
 var _is_being_pushed := false
+
+onready var _wind_timer := $ApplyWindTimer
 
 
 # Functions:
@@ -44,7 +47,7 @@ func _physics_process(delta: float) -> void:
 
 	update_inputs()		
 
-	print("Input_dir Leaf: ", _input_dir)
+	#print("Input_dir Leaf: ", _input_dir)
 	
 	if not parent.is_on_floor() or _is_being_pushed:
 		switch_gliding(true)
@@ -62,6 +65,7 @@ func update_inputs() -> void:
 	_input_dir = _input_dir.normalized()
 
 
+# gliding
 func apply_glide(delta : float) -> void:
 	velocity.y += gravity * delta
 
@@ -73,17 +77,6 @@ func apply_glide(delta : float) -> void:
 	clamp_speed()
 
 	parent.velocity = velocity
-
-
-# Speed-related functions
-func apply_friction() -> void:
-	velocity.x = lerp(velocity.x, 0, in_air_friction_x)
-	velocity.y = lerp(velocity.y, 0, in_air_friction_y)
-
-
-func clamp_speed() -> void:
-	velocity.x = clamp(velocity.x, -_TERMINAL_SPEED, _TERMINAL_SPEED)
-	velocity.y = clamp(velocity.y, -_TERMINAL_SPEED, _TERMINAL_SPEED)
 
 
 func switch_gliding(can_glide : bool) -> void:
@@ -111,3 +104,29 @@ func switch_gliding(can_glide : bool) -> void:
 
 		parent.velocity = velocity
 		
+
+# Speed-related functions
+func apply_friction() -> void:
+	velocity.x = lerp(velocity.x, 0, in_air_friction_x)
+	velocity.y = lerp(velocity.y, 0, in_air_friction_y)
+
+
+func clamp_speed() -> void:
+	velocity.x = clamp(velocity.x, -_TERMINAL_SPEED, _TERMINAL_SPEED)
+	velocity.y = clamp(velocity.y, -_TERMINAL_SPEED, _TERMINAL_SPEED)
+
+
+# other
+func apply_wind(wind_force : Vector2) -> void:
+	_is_being_pushed = true
+	velocity += wind_force * wind_force_multiplier
+
+	_wind_timer.start()
+
+	# print("I, the mighty leaf, is being pushed by the wind")
+
+
+func _on_ApplyWindTimer_timeout() -> void:
+	_is_being_pushed = false
+	# print("can no longer be pushed - leaf")
+	
