@@ -7,20 +7,29 @@ class_name WindArea
 
 # Variables:
 #---------------------------------------
-export(Vector2) var wind_dir := Vector2.ZERO
-export(float) var push_force := 10.0
+export(Vector2) var wind_dir := Vector2.RIGHT
+export(float) var push_force := 5.0
 
 onready var _col_shape := $CollisionShape2D
-onready var particles := $Particles2D
+onready var particles := $WindLines
+onready var back_particles := $WindBackground
 
 
 # Functions:
 #---------------------------------------
 func _ready() -> void:
+	var col_shape_extents = _col_shape.shape.extents
+
+	particles.visibility_rect = Rect2(-col_shape_extents, col_shape_extents * 2)
 	particles.process_material.direction = Vector3(wind_dir.x, wind_dir.y, 0)
-	particles.process_material.emission_box_extents = Vector3(_col_shape.shape.extents.x, _col_shape.shape.extents.y, 1)
+	particles.process_material.emission_box_extents = Vector3(col_shape_extents.x, col_shape_extents.y, 1)
+
+	back_particles.visibility_rect = Rect2(-col_shape_extents, col_shape_extents * 2)
+	back_particles.process_material.direction = Vector3(wind_dir.x, wind_dir.y, 0)
+	back_particles.process_material.emission_box_extents = Vector3(col_shape_extents.x,col_shape_extents.y, 1)
 
 	particles.emitting = true
+	back_particles.emitting = true
 
 
 func _physics_process(delta: float) -> void:

@@ -7,7 +7,7 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 resource_local_to_scene = true
-extents = Vector2( 200, 200 )
+extents = Vector2( 134.75, 261.25 )
 
 [node name="TestLevel" type="Node2D"]
 
@@ -532,9 +532,8 @@ position = Vector2( -724, -464 )
 max_health = 25.0
 
 [node name="WindArea" parent="." instance=ExtResource( 4 )]
-position = Vector2( 197, -62 )
-wind_dir = Vector2( 1, -1 )
-push_force = 4.0
+position = Vector2( 265, -128 )
+wind_dir = Vector2( -1, -1 )
 
 [node name="CollisionShape2D" parent="WindArea" index="0"]
 shape = SubResource( 1 )
