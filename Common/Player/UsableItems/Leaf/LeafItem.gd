@@ -18,11 +18,22 @@ onready var parent = get_parent().get_parent() as Player
 
 # Functions:
 #--------------------------------------
+func _ready() -> void:
+	set_active_item(false)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Action1"):
 		spawn_leaf()
 	
 	if event.is_action_released("Action1"):
+		destroy_leaf()
+
+
+func set_active_item(is_active : bool) -> void:
+	set_process_unhandled_input(is_active)
+
+	if not is_active:
 		destroy_leaf()
 
 
@@ -41,3 +52,4 @@ func destroy_leaf() -> void:
 		parent.velocity = _leaf_instance.velocity
 
 		_leaf_instance.call_deferred("free")
+		_leaf_instance = null

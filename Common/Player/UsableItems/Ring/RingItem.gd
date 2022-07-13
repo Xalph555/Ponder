@@ -18,11 +18,22 @@ onready var parent = get_parent().get_parent() as Player
 
 # Functions:
 #--------------------------------------
+func _ready() -> void:
+	set_active_item(false)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Action1"):
 		spawn_ring()
 	
 	if event.is_action_released("Action1"):
+		destroy_ring()
+
+
+func set_active_item(is_active : bool) -> void:
+	set_process_unhandled_input(is_active)
+
+	if not is_active:
 		destroy_ring()
 
 
@@ -43,4 +54,5 @@ func destroy_ring() -> void:
 		parent.velocity = _ring_instance.velocity
 		
 		_ring_instance.call_deferred("free")
+		_ring_instance = null
 

@@ -64,6 +64,12 @@ onready var parent = get_parent().get_parent() as Player
 func _ready() -> void:
 	_pivot_point.rotation_degrees = rod_start_angle
 
+	set_active_item(false)
+
+
+func set_active_item(is_active : bool) -> void:
+	set_process_unhandled_input(is_active)
+
 
 func _physics_process(delta: float) -> void:
 	update()

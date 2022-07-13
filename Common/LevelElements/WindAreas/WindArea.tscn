@@ -47,7 +47,7 @@ scale_curve = SubResource( 3 )
 [sub_resource type="Curve" id=10]
 min_value = 0.01
 max_value = 5.0
-_data = [ Vector2( 0, 0.01 ), 0.0, 0.0, 0, 0, Vector2( 1, 1.3142 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0.684784 ), 0.0, 0.0, 0, 0, Vector2( 1, 1.4106 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=11]
 curve = SubResource( 10 )

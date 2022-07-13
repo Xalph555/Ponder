@@ -37,7 +37,7 @@ var _fall_gravity : float
 var _can_jump := true
 var _jump_was_pressed := false
 
-# other variables
+# other movement variables
 var _do_stop_on_slope := true
 var _has_infinite_inertia := true
 var _snap_vector := _SNAP_DIR * _SNAP_VEC_LEN
@@ -48,7 +48,13 @@ var _input_dir := Vector2.ZERO
 var player_handles_movement := true
 var player_can_set_snap := true
 
+# item variables
+export(Array, PackedScene) var default_items
+var items = {}
+var current_item := 0
+
 # references
+onready var _item_node := $ActiveTool
 onready var _sprite := $Sprite
 
 
@@ -56,6 +62,7 @@ onready var _sprite := $Sprite
 #---------------------------------------
 func _ready() -> void:
 	set_jump_variables()
+	set_up_default_items()
 
 
 func _physics_process(delta: float) -> void:
@@ -85,6 +92,20 @@ func _physics_process(delta: float) -> void:
 	
 	# Update visuals
 	update_sprite()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Selection1"):
+		switch_item(0)
+	
+	if event.is_action_pressed("Selection2"):
+		switch_item(1)
+
+	if event.is_action_pressed("Selection3"):
+		switch_item(2)
+	
+	if event.is_action_pressed("Selection4"):
+		switch_item(3)
 
 
 func player_movement(delta: float) -> void:
@@ -193,6 +214,45 @@ func apply_friction() -> void:
 func clamp_speed() -> void:
 	velocity.x = clamp(velocity.x, -_TERMINAL_SPEED, _TERMINAL_SPEED)
 	velocity.y = clamp(velocity.y, -_TERMINAL_SPEED, _TERMINAL_SPEED)
+
+
+# item function
+func set_up_default_items() -> void:
+	for default_item in default_items:
+		add_item(default_item)
+	
+	current_item = 0
+	items[current_item].set_active_item(true)
+
+
+func switch_item(item_num : int) -> void:
+	if item_num in items and items[item_num]:
+		items[current_item].set_active_item(false)
+
+		items[item_num].set_active_item(true)
+		current_item = item_num
+
+
+func add_item(item : PackedScene) -> void:
+	var item_instance = item.instance()
+	_item_node.add_child(item_instance)
+
+	# check if there is a blank space in item slots
+	for item in items:
+		if not items[item]:
+			items[item] = item_instance
+			return
+
+	items[items.size()] = item_instance
+
+
+func remove_item(item_num : int) -> void:
+	if item_num in items and items[item_num]:
+		items[item_num].call_deferred("free")
+		items[item_num] = null
+
+		if item_num == current_item:
+			current_item = (current_item + 1) % (items.size() - 1)
 
 
 # other
