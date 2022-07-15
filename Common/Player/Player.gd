@@ -66,7 +66,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	update_inputs()
+	# update_inputs()
+	update_jump_state()
 	
 	if player_handles_movement:
 		player_movement(delta)
@@ -88,7 +89,7 @@ func _physics_process(delta: float) -> void:
 											  _MAX_SLOPE_ANGLE, 
 											  _has_infinite_inertia).y
 	
-#	print("Velocity: ", velocity)
+	print("Velocity: ", velocity)
 	
 	# Update visuals
 	update_sprite()
@@ -109,6 +110,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		_input_dir.x += 1
 
 	_input_dir = _input_dir.normalized()
+
+	# jump
+	if event.is_action_pressed("jump"):
+		_jump_was_pressed = true
+		remember_jump_time()
+		
+		if _can_jump:
+			jump()
 
 	# item switching
 	if event.is_action_pressed("Selection1"):
@@ -134,34 +143,30 @@ func player_movement(delta: float) -> void:
 	clamp_speed()
 
 
-func update_inputs() -> void:
-	# Input direction
-	# _input_dir.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-	# _input_dir = _input_dir.normalized()
+# func update_inputs() -> void:
+# 	# Jump
+# 	# if is_on_floor():
+# 	# 	_can_jump = true
+		
+# 	# 	if _jump_was_pressed:
+# 	# 		jump()
 	
-	# Jump
-	if is_on_floor():
-		_can_jump = true
-		
-		if _jump_was_pressed:
-			jump()
+# 	# else:
+# 	# 	coyote_time()
 	
-	else:
-		coyote_time()
-	
-	if Input.is_action_just_pressed("jump"):
-		_jump_was_pressed = true
-		remember_jump_time()
+# 	if Input.is_action_just_pressed("jump"):
+# 		_jump_was_pressed = true
+# 		remember_jump_time()
 		
-		if _can_jump:
-			jump()
+# 		if _can_jump:
+# 			jump()
 		
-	else:
-		if player_handles_movement and player_can_set_snap:
-			_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+# 	else:
+# 		if player_handles_movement and player_can_set_snap:
+# 			_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
 		
-		else:
-			_snap_vector = Vector2.ZERO
+# 		else:
+# 			_snap_vector = Vector2.ZERO
 
 
 func update_sprite() -> void:
@@ -185,6 +190,24 @@ func jump() -> void:
 	
 	velocity.y -= velocity.y # to fix 'super jump' bug when going up slopes
 	velocity.y += _jump_velocity
+
+
+func update_jump_state() -> void:
+	if is_on_floor():
+		_can_jump = true
+		
+		if _jump_was_pressed:
+			jump()
+	
+	else:
+		coyote_time()
+	
+	if not _can_jump:
+		if player_handles_movement and player_can_set_snap:
+			_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+		
+		else:
+			_snap_vector = Vector2.ZERO
 
 
 func coyote_time() -> void:
