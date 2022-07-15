@@ -95,6 +95,22 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# movement 
+	if event.is_action_pressed("move_right"):
+		_input_dir.x += 1
+
+	if event.is_action_released("move_right"):
+		_input_dir.x -= 1
+	
+	if event.is_action_pressed("move_left"):
+		_input_dir.x -= 1
+	
+	if event.is_action_released("move_left"):
+		_input_dir.x += 1
+
+	_input_dir = _input_dir.normalized()
+
+	# item switching
 	if event.is_action_pressed("Selection1"):
 		switch_item(0)
 	
@@ -120,8 +136,8 @@ func player_movement(delta: float) -> void:
 
 func update_inputs() -> void:
 	# Input direction
-	_input_dir.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-	_input_dir = _input_dir.normalized()
+	# _input_dir.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+	# _input_dir = _input_dir.normalized()
 	
 	# Jump
 	if is_on_floor():
@@ -226,6 +242,9 @@ func set_up_default_items() -> void:
 
 
 func switch_item(item_num : int) -> void:
+	if item_num == current_item:
+		return
+
 	if item_num in items and items[item_num]:
 		items[current_item].set_active_item(false)
 
@@ -257,4 +276,6 @@ func remove_item(item_num : int) -> void:
 
 # other
 func apply_wind(wind_force : Vector2) -> void:
+	_snap_vector = Vector2.ZERO
 	velocity += wind_force
+	

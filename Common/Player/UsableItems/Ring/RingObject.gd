@@ -74,7 +74,7 @@ func handle_collision(col_object : KinematicCollision2D) -> void:
 	if collided_object.is_in_group("breakable") and velocity.length() > 380.0:
 		# calculate damage - scales with velocity 
 		var current_damage = base_damage * velocity.length()
-		print("current damage: ", current_damage)
+		# print("current damage: ", current_damage)
 
 		# will break object
 		if (collided_object.get_health() - current_damage) <= 0:

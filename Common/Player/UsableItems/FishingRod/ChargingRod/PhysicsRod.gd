@@ -12,7 +12,7 @@ var _hook_instance : PhysicsHook
 
 # hook properties 
 export var min_line_length := 5.0
-export var hook_reel_speed := 150
+export var hook_reel_speed := 4.0
 
 var _line_length := 0.0
 
@@ -68,13 +68,15 @@ func _ready() -> void:
 
 
 func set_active_item(is_active : bool) -> void:
+	release_grapple()
 	set_process_unhandled_input(is_active)
+	self.visible = is_active
 
 
 func _physics_process(delta: float) -> void:
 	update()
 	
-	update_input(delta)
+	# update_input(delta)
 	update_sprite()
 	
 	if _is_charging:
@@ -104,13 +106,24 @@ func _draw() -> void:
 		draw_line(to_local(_hook_point.global_position), to_local(_hook_instance.global_position), Color.white, 1.01, true)
 
 
-func update_input(delta: float) -> void:
-	# input 
-	_input_dir.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-	_input_dir = _input_dir.normalized()
+func _unhandled_input(event: InputEvent) -> void:
+	# input direction
+	if event.is_action_pressed("move_right"):
+		_input_dir.x += 1
+
+	if event.is_action_released("move_right"):
+		_input_dir.x -= 1
 	
+	if event.is_action_pressed("move_left"):
+		_input_dir.x -= 1
+	
+	if event.is_action_released("move_left"):
+		_input_dir.x += 1
+
+	_input_dir = _input_dir.normalized()
+
 	# charging rod
-	if Input.is_action_just_pressed("Action1"):
+	if event.is_action_pressed("Action1"):
 		if _can_grapple:
 			_anim_player.play("ChargeReady")
 			
@@ -118,7 +131,7 @@ func update_input(delta: float) -> void:
 			release_grapple()
 
 	# throw rod
-	if Input.is_action_just_released("Action1"):
+	if event.is_action_released("Action1"):
 		_anim_player.stop()
 		
 		if _is_charging:
@@ -135,13 +148,53 @@ func update_input(delta: float) -> void:
 									_anim_pivot.rotation, 0, 
 									0.2, Tween.TRANS_SINE,Tween.EASE_IN)
 			_tween.start()
-	
+
 	# reel hook
-	if Input.is_action_just_released("ui_scroll_up"):
-		_line_length += hook_reel_speed * delta
+	if event.is_action_released("ui_scroll_up"):
+		_line_length += hook_reel_speed
 	
-	if Input.is_action_just_released("ui_scroll_down") and _can_reel:
-		_line_length = max(min_line_length, _line_length - (hook_reel_speed * delta))
+	if event.is_action_released("ui_scroll_down") and _can_reel:
+		_line_length = max(min_line_length, _line_length - (hook_reel_speed))	
+
+
+# func update_input(delta: float) -> void:
+# 	# input 
+# 	_input_dir.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+# 	_input_dir = _input_dir.normalized()
+	
+# 	# charging rod
+# 	if Input.is_action_just_pressed("Action1"):
+# 		if _can_grapple:
+# 			_anim_player.play("ChargeReady")
+			
+# 		else:
+# 			release_grapple()
+
+# 	# throw rod
+# 	if Input.is_action_just_released("Action1"):
+# 		_anim_player.stop()
+		
+# 		if _is_charging:
+# 			_is_charging = false
+# 			_anim_player.play("ThrowHook")
+			
+# 		else:
+# 			_tween.interpolate_property(_pivot_point, "rotation_degrees", 
+# 									_pivot_point.rotation_degrees, rod_start_angle, 
+# 									0.2, Tween.TRANS_SINE,Tween.EASE_IN)
+# 			_tween.start()
+			
+# 			_tween.interpolate_property(_anim_pivot, "rotation", 
+# 									_anim_pivot.rotation, 0, 
+# 									0.2, Tween.TRANS_SINE,Tween.EASE_IN)
+# 			_tween.start()
+	
+# 	# reel hook
+# 	if Input.is_action_just_released("ui_scroll_up"):
+# 		_line_length += hook_reel_speed * delta
+	
+# 	if Input.is_action_just_released("ui_scroll_down") and _can_reel:
+# 		_line_length = max(min_line_length, _line_length - (hook_reel_speed * delta))
 
 
 func update_sprite() -> void:
@@ -206,7 +259,7 @@ func line_dist_adjust() -> void:
 	if _distance_to_hook > _line_length:
 		parent.player_can_set_snap = false
 		
-		pullback_vel = _hook_dir * (hook_reel_speed / 2)
+		pullback_vel = _hook_dir * (hook_reel_speed * 10) # need multiplier to give enough force
 		parent.velocity = pullback_vel
 	
 	else:

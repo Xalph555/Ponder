@@ -47,9 +47,11 @@ func spawn_leaf() -> void:
 
 
 func destroy_leaf() -> void:
-	if _leaf_instance:
-		parent.player_handles_movement = true
+	if _leaf_instance:		
 		parent.velocity = _leaf_instance.velocity
 
 		_leaf_instance.call_deferred("free")
 		_leaf_instance = null
+
+		parent.player_handles_movement = true
+		parent.player_can_set_snap = true
