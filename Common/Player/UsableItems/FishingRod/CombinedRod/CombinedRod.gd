@@ -317,13 +317,14 @@ func line_dist_adjust() -> void:
 	
 	# restrict movement
 	if _distance_to_hook > _line_length:
-		parent.player_can_set_snap = false
+		# parent.player_can_set_snap = false
+		parent.disable_snap_vector()
 		
 		pullback_vel = _hook_dir * (hook_reel_speed * 10) # need multiplier to give enough force
 		parent.velocity = pullback_vel
 	
 	else:
-		parent.player_can_set_snap = true
+		# parent.player_can_set_snap = true
 		pullback_vel = Vector2.ZERO
 	
 	# setting _can_reel

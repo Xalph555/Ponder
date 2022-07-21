@@ -42,4 +42,5 @@ func _physics_process(delta: float) -> void:
 
 		if body.has_method("apply_wind"):
 			body.apply_wind(applied_force)
+			# body.call_deferred("apply_wind", applied_force)
 			

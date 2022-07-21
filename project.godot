@@ -64,6 +64,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Player/UsableItems/Ring/RingObject.gd"
 }, {
+"base": "Reference",
+"class": "TempTimer",
+"language": "GDScript",
+"path": "res://Common/TempTimer.gd"
+}, {
 "base": "Area2D",
 "class": "WindArea",
 "language": "GDScript",
@@ -81,6 +86,7 @@ _global_script_class_icons={
 "PropertySetterNumeric": "",
 "RingItem": "",
 "RingObject": "",
+"TempTimer": "",
 "WindArea": ""
 }
 

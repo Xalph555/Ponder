@@ -89,7 +89,7 @@ func _physics_process(delta: float) -> void:
 											  _MAX_SLOPE_ANGLE, 
 											  _has_infinite_inertia).y
 	
-	print("Velocity: ", velocity)
+	# print("Velocity: ", velocity)
 	
 	# Update visuals
 	update_sprite()
@@ -133,6 +133,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		switch_item(3)
 
 
+func update_sprite() -> void:
+	# sprite flipping
+	if _input_dir.x > 0:
+		_sprite.scale.x = 1
+		$ActiveTool.scale.x = 1
+		
+	elif _input_dir.x < 0:
+		_sprite.scale.x = -1
+		$ActiveTool.scale.x = -1
+
+
 func player_movement(delta: float) -> void:
 	velocity.y += get_gravity() * delta
 	velocity.x = clamp(velocity.x + _input_dir.x * acceleration, -limit_speed, limit_speed)
@@ -141,6 +152,14 @@ func player_movement(delta: float) -> void:
 	
 	apply_friction()
 	clamp_speed()
+
+	# # handle snap vector setting
+	# if player_can_set_snap:
+	# 	_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+	
+	# else:
+	# 	_snap_vector = Vector2.ZERO
+
 
 
 # func update_inputs() -> void:
@@ -169,15 +188,14 @@ func player_movement(delta: float) -> void:
 # 			_snap_vector = Vector2.ZERO
 
 
-func update_sprite() -> void:
-	# sprite flipping
-	if _input_dir.x > 0:
-		_sprite.scale.x = 1
-		$ActiveTool.scale.x = 1
-		
-	elif _input_dir.x < 0:
-		_sprite.scale.x = -1
-		$ActiveTool.scale.x = -1
+func disable_snap_vector() -> void:
+	_snap_vector = Vector2.ZERO
+
+	yield(TempTimer.start_timer(self, 0.5), "timeout")
+
+	_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+
+	# print("snap vector toggled")
 
 
 # Jump-related functions
@@ -186,7 +204,8 @@ func get_gravity() -> float:
 
 
 func jump() -> void:
-	_snap_vector = Vector2.ZERO
+	# _snap_vector = Vector2.ZERO
+	disable_snap_vector()
 	
 	velocity.y -= velocity.y # to fix 'super jump' bug when going up slopes
 	velocity.y += _jump_velocity
@@ -201,13 +220,6 @@ func update_jump_state() -> void:
 	
 	else:
 		coyote_time()
-	
-	if not _can_jump:
-		if player_handles_movement and player_can_set_snap:
-			_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
-		
-		else:
-			_snap_vector = Vector2.ZERO
 
 
 func coyote_time() -> void:
@@ -299,6 +311,9 @@ func remove_item(item_num : int) -> void:
 
 # other
 func apply_wind(wind_force : Vector2) -> void:
-	_snap_vector = Vector2.ZERO
+	# _snap_vector = Vector2.ZERO
+	disable_snap_vector()
 	velocity += wind_force
+
+	
 	

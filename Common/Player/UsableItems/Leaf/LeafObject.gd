@@ -88,7 +88,8 @@ func switch_gliding(can_glide : bool) -> void:
 		_just_entered_gliding = true
 
 		parent.player_handles_movement = false
-		parent.player_can_set_snap = false
+		parent.disable_snap_vector()
+		# parent.player_can_set_snap = false
 
 		velocity = parent.velocity
 
@@ -100,7 +101,7 @@ func switch_gliding(can_glide : bool) -> void:
 		_just_entered_gliding = false
 
 		parent.player_handles_movement = true
-		parent.player_can_set_snap = true
+		# parent.player_can_set_snap = true
 
 		parent.velocity = velocity
 		
