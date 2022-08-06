@@ -54,4 +54,4 @@ func destroy_leaf() -> void:
 		_leaf_instance = null
 
 		parent.player_handles_movement = true
-		parent.player_can_set_snap = true
+		# parent.player_can_set_snap = true

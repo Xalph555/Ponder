@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Control",
+"class": "DynamicPropertyPanel",
+"language": "GDScript",
+"path": "res://Common/UI/TestingPropertyPanels/DynamicPropertyPanel/DynamicPropertyPanel.gd"
+}, {
 "base": "Area2D",
 "class": "Hitbox",
 "language": "GDScript",
@@ -32,7 +37,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "LevelSwitcher",
 "language": "GDScript",
-"path": "res://Common/UI/LevelSwitcher/LevelSwitcher.gd"
+"path": "res://Common/UI/TestingPropertyPanels/LevelSwitcher/LevelSwitcher.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "PACHook",
@@ -52,7 +57,7 @@ _global_script_classes=[ {
 "base": "HBoxContainer",
 "class": "PropertySetterNumeric",
 "language": "GDScript",
-"path": "res://Common/UI/PropertySetter/PropertySetterNumeric.gd"
+"path": "res://Common/UI/TestingPropertyPanels/PropertySetter/PropertySetterNumeric.gd"
 }, {
 "base": "Node2D",
 "class": "RingItem",
@@ -75,6 +80,7 @@ _global_script_classes=[ {
 "path": "res://Common/LevelElements/WindAreas/WindArea.gd"
 } ]
 _global_script_class_icons={
+"DynamicPropertyPanel": "",
 "Hitbox": "",
 "Hurtbox": "",
 "LeafItem": "",
@@ -197,6 +203,16 @@ Selection3={
 Selection4={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":52,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+CycleLeft={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":81,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+CycleRight={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":69,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 

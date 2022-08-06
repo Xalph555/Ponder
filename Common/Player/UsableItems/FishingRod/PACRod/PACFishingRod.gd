@@ -80,7 +80,8 @@ func _physics_process(delta: float) -> void:
 			
 			if not parent.is_on_floor() and _distance_to_hook > max(1, _line_length - min_line_length):
 				if parent.player_handles_movement:
-					angular_velocity = sign(parent.velocity.x) * (parent.velocity.length() / _line_length)
+					# angular_velocity = sign(parent.velocity.x) * (parent.velocity.length() / _line_length)
+					convert_parent_velocity(parent.velocity)
 					parent.player_handles_movement = false
 					
 				apply_tension()
@@ -275,6 +276,10 @@ func apply_tension() -> void:
 		parent.velocity = parent.velocity.normalized() * max_swing_speed
 	
 #	print("speed: ", parent.velocity.length())
+
+
+func convert_parent_velocity(parent_vel : Vector2) -> void:
+	angular_velocity = sign(parent_vel.x) * (parent_vel.length() / max(_line_length, 0.0001))
 
 
 # signal callbacks

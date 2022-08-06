@@ -46,7 +46,8 @@ var velocity := Vector2.ZERO
 var _input_dir := Vector2.ZERO
 
 var player_handles_movement := true
-var player_can_set_snap := true
+# var player_can_set_snap := true
+var _has_set_snap_vector := true
 
 # item variables
 export(Array, PackedScene) var default_items
@@ -90,7 +91,8 @@ func _physics_process(delta: float) -> void:
 											  _has_infinite_inertia).y
 	
 	# print("Velocity: ", velocity)
-	
+
+
 	# Update visuals
 	update_sprite()
 
@@ -132,6 +134,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Selection4"):
 		switch_item(3)
 
+	if event.is_action_pressed("CycleLeft"):
+		switch_item(((current_item - 1) + items.size()) % items.size())
+	
+	if event.is_action_pressed("CycleRight"):
+		switch_item((current_item + 1) % items.size())
+
 
 func update_sprite() -> void:
 	# sprite flipping
@@ -154,6 +162,13 @@ func player_movement(delta: float) -> void:
 	clamp_speed()
 
 	# # handle snap vector setting
+	if is_on_floor() and not _has_set_snap_vector:
+		_has_set_snap_vector = true
+		_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+		print("snap vector reset")
+
+
+
 	# if player_can_set_snap:
 	# 	_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
 	
@@ -189,11 +204,14 @@ func player_movement(delta: float) -> void:
 
 
 func disable_snap_vector() -> void:
-	_snap_vector = Vector2.ZERO
+	if _has_set_snap_vector:
+		_snap_vector = Vector2.ZERO
+		yield(TempTimer.start_timer(self, 0.5), "timeout")
+		_has_set_snap_vector = false
 
-	yield(TempTimer.start_timer(self, 0.5), "timeout")
+	# yield(TempTimer.start_timer(self, 0.5), "timeout")
 
-	_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+	# _snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
 
 	# print("snap vector toggled")
 
@@ -311,9 +329,19 @@ func remove_item(item_num : int) -> void:
 
 # other
 func apply_wind(wind_force : Vector2) -> void:
-	# _snap_vector = Vector2.ZERO
-	disable_snap_vector()
-	velocity += wind_force
+	if player_handles_movement:
+		# _snap_vector = Vector2.ZERO
+		disable_snap_vector()
+		velocity += wind_force
+	
+	else:
+		if items[current_item].has_method("convert_parent_velocity"):
+			# items[current_item].convert_parent_velocity(velocity + wind_force)
+			items[current_item].angular_velocity += wind_force.normalized().x * wind_force.length() * 0.01
 
+			# print("fishing rod vel converted")
+
+
+	
 	
 	

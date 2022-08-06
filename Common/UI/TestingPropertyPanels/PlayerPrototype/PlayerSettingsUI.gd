@@ -1,5 +1,7 @@
 extends Control
 
+
+
 onready var _anim_player := $AnimationPlayer
 onready var _property_containers := $PropertySetters/VBoxContainer
 

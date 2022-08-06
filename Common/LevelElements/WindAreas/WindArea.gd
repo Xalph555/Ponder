@@ -33,9 +33,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	var bodies := get_overlapping_bodies()
-	
 	var applied_force = wind_dir * push_force
+	
+	var bodies := get_overlapping_bodies()
 
 	for body in bodies:
 		# print(body.name)
