@@ -35,6 +35,14 @@ func set_up_ring(ring_parent : Node, parent_velocity : Vector2, global_pos : Vec
 	position_offset = offset_pos
 
 
+func set_ring_properties(max_vert_speed : float, ver_accel : float, max_hori_speed : float, hori_accel : float, b_dmg : float) -> void:
+	max_vertical_speed = max_vert_speed
+	vertical_accel = ver_accel
+	max_horizontal_speed = max_hori_speed
+	horizontal_accel = hori_accel
+	base_damage = b_dmg
+
+
 func _physics_process(delta: float) -> void:
 	if not parent:
 		return

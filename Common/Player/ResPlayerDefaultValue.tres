@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://Common/Player/ResPlayerDefaultValue.gd" type="Script" id=1]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource( 1 )
+acceleration = 50.0
+max_speed = 400.0
+on_floor_friction = 0.25
+in_air_friction = 0.2
+jump_height = 38.0
+jump_time_to_peak = 0.4
+jump_time_to_descent = 0.4

@@ -11,6 +11,16 @@ class_name LeafItem
 export(PackedScene) var leaf_object
 export(Vector2) var placement_offset = Vector2(0, -20.0)
 
+export(float) var gravity := 60.0
+
+export(float) var acceleration := 5.0
+export(float) var max_speed := 180.0
+
+export(float) var in_air_friction_x := 0.009
+export(float) var in_air_friction_y := 0.035
+
+export(float) var wind_force_multiplier := 4.0
+
 var _leaf_instance : LeafObject
 
 onready var parent = get_parent().get_parent() as Player
@@ -44,6 +54,8 @@ func spawn_leaf() -> void:
 		add_child(_leaf_instance)
 		
 		_leaf_instance.set_up_leaf(parent, parent.velocity, parent.global_position + placement_offset)
+		
+		_leaf_instance.set_leaf_properties(gravity, acceleration, max_speed, in_air_friction_x, in_air_friction_y, wind_force_multiplier)
 
 
 func destroy_leaf() -> void:

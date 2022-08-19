@@ -41,6 +41,16 @@ func set_up_leaf(leaf_parent : Node, parent_velocity : Vector2, global_pos : Vec
 	global_position = global_pos
 
 
+func set_leaf_properties(grav : float, accel: float, m_speed : float, air_fric_x : float, air_fric_y : float, wind_multi : float) -> void:
+	gravity = grav
+	acceleration = accel
+	max_speed = m_speed
+	in_air_friction_x = air_fric_x
+	in_air_friction_y = air_fric_y
+	wind_force_multiplier = wind_multi
+
+
+
 func _physics_process(delta: float) -> void:
 	if not parent: 
 		return

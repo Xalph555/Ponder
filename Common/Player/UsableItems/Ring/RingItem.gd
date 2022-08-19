@@ -2,7 +2,6 @@
 # Ring Item Script                     #
 #--------------------------------------#
 extends Node2D
-
 class_name RingItem
 
 
@@ -10,6 +9,14 @@ class_name RingItem
 #---------------------------------------
 export(PackedScene) var ring_object
 export(Vector2) var position_offset := Vector2(0, -5)
+
+export(float) var max_vertical_speed := 1000.0
+export(float) var vertical_accel := 30.0
+
+export(float) var max_horizontal_speed := 80.0
+export(float) var horizontal_accel := 10.0
+
+export(float) var base_damage := 0.08
 
 var _ring_instance : RingObject
 
@@ -46,6 +53,8 @@ func spawn_ring() -> void:
 		get_tree().get_root().add_child(_ring_instance)
 		
 		_ring_instance.set_up_ring(parent, parent.velocity, parent.global_position, position_offset)
+
+		_ring_instance.set_ring_properties(max_vertical_speed, vertical_accel, max_horizontal_speed, horizontal_accel, base_damage)
 
 
 func destroy_ring() -> void:

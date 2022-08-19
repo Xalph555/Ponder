@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://Common/Player/UsableItems/Ring/ResRingDefaulValue.gd" type="Script" id=1]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource( 1 )
+max_vertical_speed = 1000.0
+vertical_accel = 30.0
+max_horizontal_speed = 80.0
+horizontal_accel = 10.0
+base_damage = 0.08

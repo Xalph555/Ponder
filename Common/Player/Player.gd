@@ -2,8 +2,13 @@
 # Player Script                        #
 #--------------------------------------#
 extends KinematicBody2D
-
 class_name Player
+
+
+# Signals:
+#---------------------------------------
+signal items_ready
+signal item_switched(item_num)
 
 
 # Variables:
@@ -17,8 +22,8 @@ const _MAX_SLIDES := 4
 const _MAX_SLOPE_ANGLE := deg2rad(46)
 
 # movement variables
-export var acceleration:= 50
-export var max_speed := 400
+export var acceleration:= 50.0
+export var max_speed := 400.0
 
 onready var limit_speed := max_speed
 
@@ -293,6 +298,8 @@ func set_up_default_items() -> void:
 	current_item = 0
 	items[current_item].set_active_item(true)
 
+	emit_signal("items_ready")
+
 
 func switch_item(item_num : int) -> void:
 	if item_num == current_item:
@@ -303,6 +310,8 @@ func switch_item(item_num : int) -> void:
 
 		items[item_num].set_active_item(true)
 		current_item = item_num
+	
+		emit_signal("item_switched", current_item)
 
 
 func add_item(item : PackedScene) -> void:

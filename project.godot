@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Resource",
+"class": "DefaultSaveWrapper",
+"language": "GDScript",
+"path": "res://Common/Resources/SaveWrapper/DefaultSaveWrapper.gd"
+}, {
 "base": "Control",
 "class": "DynamicPropertyPanel",
 "language": "GDScript",
@@ -23,6 +28,11 @@ _global_script_classes=[ {
 "class": "Hurtbox",
 "language": "GDScript",
 "path": "res://Common/Areas/HitHurtBox/HurtBox.gd"
+}, {
+"base": "Resource",
+"class": "LeafDefaultValues",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/Leaf/ResLeafDefaultValue.gd"
 }, {
 "base": "Node2D",
 "class": "LeafItem",
@@ -44,6 +54,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Player/UsableItems/FishingRod/PACRod/PACHook.gd"
 }, {
+"base": "Resource",
+"class": "PACRodDefaultValues",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/FishingRod/PACRod/ResPACRodDefaultValue.gd"
+}, {
 "base": "RigidBody2D",
 "class": "PhysicsHook",
 "language": "GDScript",
@@ -54,10 +69,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Player/Player.gd"
 }, {
+"base": "Resource",
+"class": "PlayerDefaultValues",
+"language": "GDScript",
+"path": "res://Common/Player/ResPlayerDefaultValue.gd"
+}, {
 "base": "HBoxContainer",
 "class": "PropertySetterNumeric",
 "language": "GDScript",
 "path": "res://Common/UI/TestingPropertyPanels/PropertySetter/PropertySetterNumeric.gd"
+}, {
+"base": "Resource",
+"class": "RingDefaultValues",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/Ring/ResRingDefaulValue.gd"
 }, {
 "base": "Node2D",
 "class": "RingItem",
@@ -80,16 +105,21 @@ _global_script_classes=[ {
 "path": "res://Common/LevelElements/WindAreas/WindArea.gd"
 } ]
 _global_script_class_icons={
+"DefaultSaveWrapper": "",
 "DynamicPropertyPanel": "",
 "Hitbox": "",
 "Hurtbox": "",
+"LeafDefaultValues": "",
 "LeafItem": "",
 "LeafObject": "",
 "LevelSwitcher": "",
 "PACHook": "",
+"PACRodDefaultValues": "",
 "PhysicsHook": "",
 "Player": "",
+"PlayerDefaultValues": "",
 "PropertySetterNumeric": "",
+"RingDefaultValues": "",
 "RingItem": "",
 "RingObject": "",
 "TempTimer": "",

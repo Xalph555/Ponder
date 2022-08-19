@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://Common/Player/UsableItems/Leaf/ResLeafDefaultValue.gd" type="Script" id=1]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource( 1 )
+gravity = 60.0
+acceleration = 5.0
+max_speed = 180.0
+in_air_friction_x = 0.009
+in_air_friction_y = 0.035
+wind_force_multiplier = 4.0
