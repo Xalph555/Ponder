@@ -1,8 +1,0 @@
-Player Settings
-acceleration100
-max_speed400
-on_floor_friction12321
-in_air_friction0.2
-jump_height1231
-jump_time_to_peak0.4
-jump_time_to_descent0.4

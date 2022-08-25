@@ -129,7 +129,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Ponder"
-run/main_scene="res://Levels/Prototypes/FishingRods/PacPrototypeLevel.tscn"
+run/main_scene="res://Levels/Prototypes/August2022/August2022Prototype.tscn"
 config/icon="res://icon.png"
 
 [autoload]

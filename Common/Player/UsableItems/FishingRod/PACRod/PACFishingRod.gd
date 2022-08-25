@@ -12,7 +12,7 @@ var _hook_instance : PACHook
 
 # hook properties 
 export var min_line_length := 5.0
-export var hook_reel_speed := 4.0
+export var hook_reel_speed := 10.0
 
 var _line_length := 0.0
 
@@ -26,7 +26,7 @@ var pullback_vel := Vector2.ZERO
 
 # hook swing properties
 export var swing_force := 0.25
-export var push_force := 0.06
+export var push_force := 0.065
 
 export var max_swing_speed := 500.0
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Common/UI/PixelArialFont.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Common/UI/TestingPropertyPanels/PropertySetter/PropertySetterNumeric.tscn" type="PackedScene" id=2]
@@ -7,7 +7,7 @@
 
 [sub_resource type="Animation" id=7]
 resource_name = "ExportedChanges"
-length = 0.3
+length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("ExportedTitle:visible")
 tracks/0/interp = 1
@@ -15,13 +15,44 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.4 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
 }
 
 [sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("ExportedTitle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "ExportedChanges"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("ExportedTitle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="Animation" id=9]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("ExportedTitle:visible")
@@ -73,6 +104,11 @@ property_setter = ExtResource( 2 )
 reset_on_save = false
 anims/ExportedChanges = SubResource( 7 )
 anims/RESET = SubResource( 2 )
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
+reset_on_save = false
+anims/ExportedChanges = SubResource( 8 )
+anims/RESET = SubResource( 9 )
 
 [node name="FileDialog" type="FileDialog" parent="."]
 anchor_left = 0.5

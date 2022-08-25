@@ -94,7 +94,7 @@ func _on_FileDialog_dir_selected(dir:String) -> void:
 	text_file.store_line(setter_title)
 	
 	for i in property_container.get_children():
-		var property_setting = str(i.display_name) + str(i.current_setting)
+		var property_setting = str(i.display_name) + ": " + str(i.current_setting)
 		text_file.store_line(property_setting)
 	
 	text_file.close()
