@@ -121,6 +121,7 @@ margin_right = 264.0
 margin_bottom = 171.0
 window_title = "Open a Directory"
 mode = 2
+access = 2
 
 [node name="ExportedTitle" type="Label" parent="."]
 visible = false
@@ -173,6 +174,7 @@ alignment = 1
 margin_left = 32.0
 margin_right = 87.0
 margin_bottom = 23.0
+focus_mode = 0
 custom_fonts/font = ExtResource( 1 )
 text = "Reset"
 
@@ -180,7 +182,9 @@ text = "Reset"
 margin_left = 107.0
 margin_right = 166.0
 margin_bottom = 23.0
+focus_mode = 0
 custom_fonts/font = ExtResource( 1 )
+enabled_focus_mode = 0
 text = "Export"
 
 [connection signal="dir_selected" from="FileDialog" to="." method="_on_FileDialog_dir_selected"]

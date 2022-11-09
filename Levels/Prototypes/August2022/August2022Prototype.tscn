@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Common/Player/ResPlayerDefaultValue.tres" type="Resource" id=1]
 [ext_resource path="res://Common/UI/PrototypeUI.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Common/Player/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Common/Player/Player/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Common/LevelElements/TileMaps/TestGrass.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Levels/Prototypes/PrototypeSky.png" type="Texture" id=5]
 [ext_resource path="res://Common/UI/TestingPropertyPanels/DynamicPropertyPanel/DynamicPropertyPanel.tscn" type="PackedScene" id=6]

@@ -20,7 +20,10 @@ onready var property_container := $PanelContainer/VBoxContainer/PropertySetters
 
 onready var _anim_player := $AnimationPlayer
 
+onready var _reset_button := $PanelContainer/VBoxContainer/Buttons/ResetButton
+onready var _export_button := $PanelContainer/VBoxContainer/Buttons/ExportButton
 onready var _file_dialog := $FileDialog
+
 
 
 # Functions:
@@ -82,6 +85,7 @@ func _on_value_changed(_new_value : float) -> void:
 
 func _on_ExportButton_button_up() -> void:
 	_file_dialog.popup_centered()
+	_export_button.release_focus()
 
 
 func _on_FileDialog_dir_selected(dir:String) -> void:
@@ -101,6 +105,9 @@ func _on_FileDialog_dir_selected(dir:String) -> void:
 
 	_anim_player.play("ExportedChanges")
 
+	_export_button.release_focus()
+
 
 func _on_ResetButton_button_up() -> void:
 	load_default_stats()
+	_reset_button.release_focus()

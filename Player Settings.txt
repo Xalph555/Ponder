@@ -1,0 +1,8 @@
+Player Settings
+acceleration: 1000
+max_speed: 400
+on_floor_friction: 0.25
+in_air_friction: 0.3
+jump_height: 599
+jump_time_to_peak: 0.4
+jump_time_to_descent: 0.4

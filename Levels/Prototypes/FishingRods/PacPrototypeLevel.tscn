@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Common/UI/TestingPropertyPanels/RodPrototypes/PACRodUI.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Common/Player/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Common/Player/Player/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Common/Player/UsableItems/FishingRod/PACRod/PACFishingRod.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Common/LevelElements/TileMaps/TestGrass.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Common/UI/TestingPropertyPanels/PlayerPrototype/PlayerSettingsUI.tscn" type="PackedScene" id=5]

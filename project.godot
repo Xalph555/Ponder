@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "BaseState",
+"language": "GDScript",
+"path": "res://Common/StateMachine/BaseState.gd"
+}, {
+"base": "Node",
+"class": "BaseStateManager",
+"language": "GDScript",
+"path": "res://Common/StateMachine/StateManager.gd"
+}, {
 "base": "Resource",
 "class": "DefaultSaveWrapper",
 "language": "GDScript",
@@ -67,12 +77,22 @@ _global_script_classes=[ {
 "base": "KinematicBody2D",
 "class": "Player",
 "language": "GDScript",
-"path": "res://Common/Player/Player.gd"
+"path": "res://Common/Player/Player/Player.gd"
+}, {
+"base": "BaseState",
+"class": "PlayerBaseState",
+"language": "GDScript",
+"path": "res://Common/Player/PlayerV2/PlayerStateMachine/States/BasePlayerState.gd"
 }, {
 "base": "Resource",
 "class": "PlayerDefaultValues",
 "language": "GDScript",
 "path": "res://Common/Player/ResPlayerDefaultValue.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "PlayerV2",
+"language": "GDScript",
+"path": "res://Common/Player/PlayerV2/PlayerV2.gd"
 }, {
 "base": "HBoxContainer",
 "class": "PropertySetterNumeric",
@@ -105,6 +125,8 @@ _global_script_classes=[ {
 "path": "res://Common/LevelElements/WindAreas/WindArea.gd"
 } ]
 _global_script_class_icons={
+"BaseState": "",
+"BaseStateManager": "",
 "DefaultSaveWrapper": "",
 "DynamicPropertyPanel": "",
 "Hitbox": "",
@@ -117,7 +139,9 @@ _global_script_class_icons={
 "PACRodDefaultValues": "",
 "PhysicsHook": "",
 "Player": "",
+"PlayerBaseState": "",
 "PlayerDefaultValues": "",
+"PlayerV2": "",
 "PropertySetterNumeric": "",
 "RingDefaultValues": "",
 "RingItem": "",

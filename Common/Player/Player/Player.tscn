@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Common/Player/TestPlayerSprite.png" type="Texture" id=1]
-[ext_resource path="res://Common/Areas/HitHurtBox/HurtBox.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Common/Player/Player.gd" type="Script" id=3]
-[ext_resource path="res://Common/Player/UsableItems/Leaf/LeafItem.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Common/Player/UsableItems/Ring/RingItem.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Common/Player/UsableItems/FishingRod/PACRod/PACFishingRod.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Common/Player/UsableItems/Leaf/LeafItem.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Common/Player/UsableItems/Ring/RingItem.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Common/Player/UsableItems/FishingRod/PACRod/PACFishingRod.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Common/Areas/HitHurtBox/HurtBox.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Common/Player/Player/Player.gd" type="Script" id=5]
+[ext_resource path="res://Common/Player/TestPlayerSprite.png" type="Texture" id=6]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 6.0
@@ -17,8 +17,8 @@ height = 8.0
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 512
-script = ExtResource( 3 )
-default_items = [ ExtResource( 6 ), ExtResource( 4 ), ExtResource( 5 ) ]
+script = ExtResource( 5 )
+default_items = [ ExtResource( 3 ), ExtResource( 1 ), ExtResource( 2 ) ]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 0, -40 )
@@ -32,12 +32,12 @@ drag_margin_right = 0.02
 drag_margin_bottom = 0.02
 
 [node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 1 )
+texture = ExtResource( 6 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
-[node name="HurtBox" parent="." instance=ExtResource( 2 )]
+[node name="HurtBox" parent="." instance=ExtResource( 4 )]
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
