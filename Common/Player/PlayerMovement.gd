@@ -6,24 +6,33 @@ class_name PlayerMovement
 
 # Variables:
 #---------------------------------------
-const _TERMINAL_SPEED := 4500
+export(float) var gravity := 100.0
 
-const _UP_DIR := Vector2.UP
-const _SNAP_DIR := Vector2.DOWN
-const _SNAP_VEC_LEN := 33
-const _MAX_SLIDES := 4
-const _MAX_SLOPE_ANGLE := deg2rad(46)
 
-var _do_stop_on_slope := true
-var _has_infinite_inertia := true
-var _snap_vector := _SNAP_DIR * _SNAP_VEC_LEN
+# Horizontal movement
+export(float) var terminal_speed := 4500.0
 
 export(float) var move_speed = 60.0
 
-export(float) var gravity := 100.0
 
-# export(float) var jump_force = 200.0
+# Move and Slide variables
+var _up_dir := Vector2.UP
+var _snap_dir := Vector2.DOWN
 
+export(float) var _snap_vec_len := 33.0
+export(int) var _max_slides := 4
+
+export(float) var _max_slope_angle := 46.0
+
+var _do_stop_on_slope := true
+var _has_infinite_inertia := true
+
+var _snap_vector := _snap_dir * _snap_vec_len
+
+var velocity := Vector2.ZERO
+
+
+# Jump variables
 export var jump_height := 38.0 setget set_jump_height
 export var jump_time_to_peak := 0.4 setget set_jump_time_to_peak
 export var jump_time_to_descent := 0.4 setget set_jump_time_to_descent
@@ -32,8 +41,8 @@ var _jump_velocity : float
 var _jump_gravity : float
 var _fall_gravity : float
 
-var velocity := Vector2.ZERO
 
+# other
 var player: PlayerV2
 
 
@@ -41,7 +50,9 @@ var player: PlayerV2
 #---------------------------------------
 func init(new_player: PlayerV2) -> void:
 	set_jump_variables()
-	
+
+	_max_slope_angle = deg2rad(_max_slope_angle)
+
 	player = new_player
 
 
@@ -52,19 +63,19 @@ func move_player(delta: float, dir := Vector2.ZERO) -> void:
 	if player.is_on_wall():
 		velocity = player.move_and_slide_with_snap(velocity, 
 												   _snap_vector, 
-												   _UP_DIR, 
+												   _up_dir, 
 												   _do_stop_on_slope, 
-												   _MAX_SLIDES, 
-												   _MAX_SLOPE_ANGLE, 
+												   _max_slides, 
+												   _max_slope_angle, 
 												   _has_infinite_inertia)
 	
 	else:
 		velocity.y = player.move_and_slide_with_snap(velocity, 
 												     _snap_vector, 
-												     _UP_DIR, 
+												     _up_dir, 
 												     _do_stop_on_slope, 
-												     _MAX_SLIDES, 
-												     _MAX_SLOPE_ANGLE, 
+												     _max_slides, 
+												     _max_slope_angle, 
 												     _has_infinite_inertia).y
 	
 	print("Player Velocity: ", velocity)
@@ -72,7 +83,7 @@ func move_player(delta: float, dir := Vector2.ZERO) -> void:
 
 func set_snap(is_enabled: bool) -> void:
 	if is_enabled:
-		_snap_vector = _SNAP_DIR * _SNAP_VEC_LEN
+		_snap_vector = _snap_dir * _snap_vec_len
 	
 	else:
 		_snap_vector = Vector2.ZERO
@@ -85,7 +96,7 @@ func get_gravity() -> float:
 func jump_player() -> void:
 	set_snap(false)
 
-	# velocity.y -= jump_force
+	velocity.y -= velocity.y
 	velocity.y += _jump_velocity
 
 
