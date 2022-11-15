@@ -537,8 +537,12 @@ push_force = 10.0
 shape = SubResource( 1 )
 
 [node name="PlayerV2" parent="." instance=ExtResource( 5 )]
-position = Vector2( -650, -274 )
+position = Vector2( 94, 79 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [editable path="WindArea"]
 [editable path="PlayerV2"]
+[editable path="PlayerV2/PlayerStateMachine"]
 [editable path="PlayerV2/HurtBox"]

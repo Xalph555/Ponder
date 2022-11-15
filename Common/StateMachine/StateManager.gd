@@ -7,43 +7,37 @@ class_name BaseStateManager
 # Variables:
 #---------------------------------------
 
-# need to populate states dictionary with all states for class
+# need to populate states dictionary with references to all states for manager
 var states = {}
 
-var current_state: BaseState
+var current_state: int
+var previous_state: int
 
 
 # Functions:
 #---------------------------------------
 
-func change_state (new_state: int) -> void:
+func change_state (new_state: int, arg := {}) -> void:
 	if current_state:
-		current_state.exit()
+		states[current_state].exit()
 
-	current_state = states[new_state]
-	current_state.enter()
+	previous_state = current_state
+	current_state = new_state
 
-	print("New State: ", new_state)
+	states[current_state].enter(arg)
+
+	print("New State: ", states[current_state].get_state_name())
 
 
 # need initialisation function to properly intialise state machine
 
 func input(event: InputEvent) -> void:
-	var new_state = current_state.input(event)
-
-	if new_state != 0:
-		change_state(new_state)
+	states[current_state].input(event)
 
 
 func process(delta: float) -> void:
-	var new_state = current_state.process(delta)
-
-	if new_state != 0:
-		change_state(new_state)
+	states[current_state].process(delta)
 
 
 func physics_process(delta: float) -> void:
-	var new_state = current_state.physics_process(delta)
-
-	if new_state != 0:
-		change_state(new_state)
+	states[current_state].physics_process(delta)

@@ -6,10 +6,11 @@ class_name PlayerV2
 
 # Variables:
 #---------------------------------------
-var gravity := 4.0
-var velocity := Vector2.ZERO
+# var gravity := 4.0
+# var velocity := Vector2.ZERO
 
-onready var state_manager = $PlayerStateMachine
+onready var state_manager := $PlayerStateMachine
+onready var player_movement := $PlayerMovement
 
 
 # Functions:
@@ -17,6 +18,7 @@ onready var state_manager = $PlayerStateMachine
 
 func _ready() -> void:
 	state_manager.init(self)
+	player_movement.init(self)
 
 
 func _unhandled_input(event: InputEvent) -> void:

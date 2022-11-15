@@ -6,27 +6,28 @@ extends PlayerBaseState
 # Functions:
 #---------------------------------------
 
-func enter() -> void:
+func enter(arg := {}) -> void:
 	.enter()
-	player.velocity.x = 0
+	player.player_movement.velocity.x = 0
 
 
-func input(event: InputEvent) -> int:
+func input(event: InputEvent) -> void:
 	if event.is_action_pressed("move_left") or event.is_action_pressed("move_right"):
-		return PlayerBaseState.State.WALK
+		state_manager.change_state(PlayerBaseState.State.WALK)
 
 	elif event.is_action_pressed("jump"):
-		return PlayerBaseState.State.JUMP
-	
-	return PlayerBaseState.State.NULL
+		state_manager.change_state(PlayerBaseState.State.JUMP)
 
 
-func physics_process(delta: float) -> int:
-	player.velocity.y += player.gravity
-	player.velocity = player.move_and_slide(player.velocity, Vector2.UP)
+func physics_process(delta: float) -> void:
+	# player.velocity.y += player.gravity
+	# player.velocity = player.move_and_slide(player.velocity, Vector2.UP)
 
-	if !player.is_on_floor():
-		return PlayerBaseState.State.FALL
+	player.player_movement.move_player(delta)
 
-	return PlayerBaseState.State.NULL
+	if !player.is_on_floor() and player.player_movement.velocity.y > 0:
+		state_manager.change_state(PlayerBaseState.State.FALL)
 
+
+func get_state_name() -> String:
+	return "Player Idle"

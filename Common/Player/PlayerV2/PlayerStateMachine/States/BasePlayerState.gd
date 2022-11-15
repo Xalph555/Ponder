@@ -15,3 +15,10 @@ enum State {
 }
 
 var player: PlayerV2
+
+
+# Functions:
+#---------------------------------------
+
+func get_state_name() -> String:
+	return "Player Base State"

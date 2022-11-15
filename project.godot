@@ -89,6 +89,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Player/ResPlayerDefaultValue.gd"
 }, {
+"base": "PlayerBaseState",
+"class": "PlayerMoveState",
+"language": "GDScript",
+"path": "res://Common/Player/PlayerV2/PlayerStateMachine/States/Move.gd"
+}, {
+"base": "Node",
+"class": "PlayerMovement",
+"language": "GDScript",
+"path": "res://Common/Player/PlayerMovement.gd"
+}, {
 "base": "KinematicBody2D",
 "class": "PlayerV2",
 "language": "GDScript",
@@ -141,6 +151,8 @@ _global_script_class_icons={
 "Player": "",
 "PlayerBaseState": "",
 "PlayerDefaultValues": "",
+"PlayerMoveState": "",
+"PlayerMovement": "",
 "PlayerV2": "",
 "PropertySetterNumeric": "",
 "RingDefaultValues": "",
