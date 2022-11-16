@@ -10,12 +10,9 @@ export(float) var gravity := 100.0
 
 # Horizontal movement
 export(float) var terminal_speed := 4500.0
-
-export(float) var move_speed = 60.0
-
 export var acceleration:= 50.0
-export var max_speed := 400.0
 
+export var max_speed := 400.0
 onready var limit_speed := max_speed
 
 export var on_floor_friction := 0.25
@@ -26,9 +23,8 @@ export var in_air_friction := 0.2
 var _up_dir := Vector2.UP
 var _snap_dir := Vector2.DOWN
 
-export(float) var _snap_vec_len := 33.0
+export(float) var _snap_vec_len := 16.0
 export(int) var _max_slides := 4
-
 export(float) var _max_slope_angle := 46.0
 
 var _do_stop_on_slope := true
@@ -76,12 +72,11 @@ func move_player(delta: float, dir := Vector2.ZERO, friction_applied := true) ->
 
 	player_move_and_slide()
 	
-	print("Player Velocity: ", velocity)
+	# print("Player Velocity: ", velocity)
 
 
 func player_move_and_slide() -> void:
-	if player.is_on_wall():
-		velocity = player.move_and_slide_with_snap(velocity, 
+	velocity = player.move_and_slide_with_snap(velocity, 
 												   _snap_vector, 
 												   _up_dir, 
 												   _do_stop_on_slope, 
@@ -89,14 +84,25 @@ func player_move_and_slide() -> void:
 												   _max_slope_angle, 
 												   _has_infinite_inertia)
 	
-	else:
-		velocity.y = player.move_and_slide_with_snap(velocity, 
-												     _snap_vector, 
-												     _up_dir, 
-												     _do_stop_on_slope, 
-												     _max_slides, 
-												     _max_slope_angle, 
-												     _has_infinite_inertia).y
+	# this was my old movement code - things seem to work fine without this? (16/11/2022)
+
+	# if player.is_on_wall():
+	# 	velocity = player.move_and_slide_with_snap(velocity, 
+	# 											   _snap_vector, 
+	# 											   _up_dir, 
+	# 											   _do_stop_on_slope, 
+	# 											   _max_slides, 
+	# 											   _max_slope_angle, 
+	# 											   _has_infinite_inertia)
+	
+	# else:
+	# 	velocity.y = player.move_and_slide_with_snap(velocity, 
+	# 											     _snap_vector, 
+	# 											     _up_dir, 
+	# 											     _do_stop_on_slope, 
+	# 											     _max_slides, 
+	# 											     _max_slope_angle, 
+	# 											     _has_infinite_inertia).y
 
 
 func set_snap(is_enabled: bool) -> void:
@@ -105,6 +111,8 @@ func set_snap(is_enabled: bool) -> void:
 	
 	else:
 		_snap_vector = Vector2.ZERO
+	
+	# print("is snap vector enabled: ", is_enabled)
 
 
 func get_gravity() -> float:

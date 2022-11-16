@@ -4,22 +4,19 @@ extends PlayerBaseState
 class_name PlayerMoveState
 
 
-# Variables:
-#---------------------------------------
-export(float) var move_speed = 60.0
-
-
 # Functions:
 #---------------------------------------
 func input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump"):
 		state_manager.change_state(PlayerBaseState.State.JUMP)
+		return
 
 
 func physics_process(delta: float) -> void:
-	if !player.is_on_floor():
+	if not player.is_on_floor():
 		state_manager.change_state(PlayerBaseState.State.FALL)
-	
+		return
+		
 	var input_dir = get_movement_input()
 	
 	player.player_movement.move_player(delta, input_dir)
@@ -28,6 +25,7 @@ func physics_process(delta: float) -> void:
 
 	if is_zero_approx(input_dir.x): 
 		state_manager.change_state(PlayerBaseState.State.IDLE)
+		return
 
 
 func get_movement_input() -> Vector2:

@@ -11,6 +11,7 @@ onready var player_movement := $PlayerMovement
 
 onready var _sprite := $Sprite
 
+
 # Functions:
 #---------------------------------------
 func _ready() -> void:

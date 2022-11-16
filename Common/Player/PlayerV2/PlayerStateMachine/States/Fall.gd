@@ -5,8 +5,6 @@ extends PlayerBaseState
 
 # Variables:
 #---------------------------------------
-export(float) var move_speed = 60.0
-
 export(float) var jump_buffer = 0.1
 var _jump_buffer_timer := 0.0
 
@@ -19,16 +17,17 @@ var _coyote_timer := 0.0
 func enter(arg := {}) -> void:
 	.enter()
 
-	if !arg.has("no_jump"):
+	if not arg.has("no_jump"):
 		_jump_buffer_timer = 0
 		_coyote_timer = coyote_delay
 
-		print("Falling and can jump")
+		# print("Falling and can jump")
 
 
 func input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump") and _coyote_timer > 0:
 		state_manager.change_state(PlayerBaseState.State.JUMP)
+		return
 
 	if event.is_action_pressed("jump") and _jump_buffer_timer <= 0:
 		_jump_buffer_timer = jump_buffer
@@ -51,12 +50,15 @@ func physics_process(delta: float) -> void:
 
 		if _jump_buffer_timer > 0:
 			state_manager.change_state(PlayerBaseState.State.JUMP)
+			return
 
-		if is_zero_approx(input_dir.x):
+		if is_zero_approx(input_dir.x):	
 			state_manager.change_state(PlayerBaseState.State.IDLE)
+			return
 		
 		else:
 			state_manager.change_state(PlayerBaseState.State.WALK)
+			return
 
 
 func get_movement_input() -> Vector2:

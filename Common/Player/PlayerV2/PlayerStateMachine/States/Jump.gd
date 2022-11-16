@@ -3,14 +3,6 @@
 extends PlayerBaseState
 
 
-# Variables:
-#---------------------------------------
-export(float) var jump_force = 200.0
-export(float) var move_speed = 60.0
-
-# var input_dir := Vector2.ZERO
-
-
 # Functions:
 #---------------------------------------
 func enter(arg := {}) -> void:
@@ -34,13 +26,18 @@ func physics_process(delta: float) -> void:
 
 	if player.player_movement.velocity.y > 0:
 		state_manager.change_state(PlayerBaseState.State.FALL, {no_jump = true})
+		return
 	
 	if player.is_on_floor():
+		player.player_movement.set_snap(true)
+		
 		if is_zero_approx(input_dir.x):
 			state_manager.change_state(PlayerBaseState.State.IDLE)
+			return
 		
 		else:
 			state_manager.change_state(PlayerBaseState.State.WALK)
+			return
 
 
 func get_state_name() -> String:
