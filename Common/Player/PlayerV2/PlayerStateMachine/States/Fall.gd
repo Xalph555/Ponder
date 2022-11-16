@@ -44,9 +44,11 @@ func physics_process(delta: float) -> void:
 
 	player.player_movement.move_player(delta, input_dir)
 
+	player.update_sprite(input_dir)
+
 	if player.is_on_floor():
 		player.player_movement.set_snap(true)
-		
+
 		if _jump_buffer_timer > 0:
 			state_manager.change_state(PlayerBaseState.State.JUMP)
 

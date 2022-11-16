@@ -17,12 +17,14 @@ func input(event: InputEvent) -> void:
 
 
 func physics_process(delta: float) -> void:
-	if !player.is_on_floor():# and player.player_movement.velocity.y > 0:
+	if !player.is_on_floor():
 		state_manager.change_state(PlayerBaseState.State.FALL)
 	
 	var input_dir = get_movement_input()
 	
 	player.player_movement.move_player(delta, input_dir)
+
+	player.update_sprite(input_dir)
 
 	if is_zero_approx(input_dir.x): 
 		state_manager.change_state(PlayerBaseState.State.IDLE)

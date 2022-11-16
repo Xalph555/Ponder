@@ -5,9 +5,9 @@ extends PlayerBaseState
 
 # Functions:
 #---------------------------------------
-
 func enter(arg := {}) -> void:
 	.enter()
+	
 	player.player_movement.velocity.x = 0
 
 

@@ -17,7 +17,6 @@ var state_manager : BaseStateManager
 
 # Functions:
 #---------------------------------------
-
 func enter(arg := {}) -> void:
 	pass
 
