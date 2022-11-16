@@ -11,24 +11,16 @@ export(float) var move_speed = 60.0
 
 # Functions:
 #---------------------------------------
-func enter(arg := {}) -> void:
-	player.player_movement.set_snap(true)
-
-
 func input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump"):
 		state_manager.change_state(PlayerBaseState.State.JUMP)
 
 
 func physics_process(delta: float) -> void:
-	if !player.is_on_floor() and player.player_movement.velocity.y > 0:
+	if !player.is_on_floor():# and player.player_movement.velocity.y > 0:
 		state_manager.change_state(PlayerBaseState.State.FALL)
 	
 	var input_dir = get_movement_input()
-
-	# player.velocity.y += player.gravity
-	# player.velocity.x = input_dir.x * move_speed
-	# player.velocity = player.move_and_slide(player.velocity, Vector2.UP)
 	
 	player.player_movement.move_player(delta, input_dir)
 

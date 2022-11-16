@@ -15,8 +15,7 @@ export(float) var move_speed = 60.0
 #---------------------------------------
 func enter(arg := {}) -> void:
 	.enter()
-	# player.player_movement.velocity.y = -jump_force
-	# player.player_movement.set_snap(false)
+	player.player_movement.set_snap(false)
 	player.player_movement.jump_player()
 
 
@@ -28,10 +27,6 @@ func physics_process(delta: float) -> void:
 	
 	if Input.is_action_pressed("move_right"):
 		input_dir.x = 1
-		
-	# player.velocity.y += player.gravity
-	# player.velocity.x = input_dir.x * move_speed
-	# player.velocity = player.move_and_slide(player.velocity, Vector2.UP)
 
 	player.player_movement.move_player(delta, input_dir)
 
@@ -40,11 +35,9 @@ func physics_process(delta: float) -> void:
 	
 	if player.is_on_floor():
 		if is_zero_approx(input_dir.x):
-			# player.player_movement.set_snap(true)
 			state_manager.change_state(PlayerBaseState.State.IDLE)
 		
 		else:
-			# player.player_movement.set_snap(true)
 			state_manager.change_state(PlayerBaseState.State.WALK)
 
 

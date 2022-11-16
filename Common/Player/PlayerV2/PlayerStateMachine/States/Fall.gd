@@ -42,22 +42,18 @@ func process(delta: float) -> void:
 func physics_process(delta: float) -> void:
 	var input_dir = get_movement_input()
 
-	# player.velocity.y += player.gravity
-	# player.velocity.x = input_dir.x * move_speed
-	# player.velocity = player.move_and_slide(player.velocity, Vector2.UP)
-
 	player.player_movement.move_player(delta, input_dir)
 
 	if player.is_on_floor():
+		player.player_movement.set_snap(true)
+		
 		if _jump_buffer_timer > 0:
 			state_manager.change_state(PlayerBaseState.State.JUMP)
 
 		if is_zero_approx(input_dir.x):
-			# player.player_movement.set_snap(true)
 			state_manager.change_state(PlayerBaseState.State.IDLE)
 		
 		else:
-			# player.player_movement.set_snap(true)
 			state_manager.change_state(PlayerBaseState.State.WALK)
 
 

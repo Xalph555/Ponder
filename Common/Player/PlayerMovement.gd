@@ -8,11 +8,18 @@ class_name PlayerMovement
 #---------------------------------------
 export(float) var gravity := 100.0
 
-
 # Horizontal movement
 export(float) var terminal_speed := 4500.0
 
 export(float) var move_speed = 60.0
+
+export var acceleration:= 50.0
+export var max_speed := 400.0
+
+onready var limit_speed := max_speed
+
+export var on_floor_friction := 0.25
+export var in_air_friction := 0.2
 
 
 # Move and Slide variables
@@ -56,10 +63,23 @@ func init(new_player: PlayerV2) -> void:
 	player = new_player
 
 
-func move_player(delta: float, dir := Vector2.ZERO) -> void:
+func move_player(delta: float, dir := Vector2.ZERO, friction_applied := true) -> void:
 	velocity.y += get_gravity() * delta
-	velocity.x = dir.x * move_speed
+	
+	velocity.x = clamp(velocity.x + dir.x * acceleration, -limit_speed, limit_speed)
+	limit_speed = lerp(limit_speed, max_speed, 0.02)
 
+	if friction_applied:
+		apply_friction()
+	
+	clamp_speed()
+
+	player_move_and_slide()
+	
+	print("Player Velocity: ", velocity)
+
+
+func player_move_and_slide() -> void:
 	if player.is_on_wall():
 		velocity = player.move_and_slide_with_snap(velocity, 
 												   _snap_vector, 
@@ -77,8 +97,6 @@ func move_player(delta: float, dir := Vector2.ZERO) -> void:
 												     _max_slides, 
 												     _max_slope_angle, 
 												     _has_infinite_inertia).y
-	
-	print("Player Velocity: ", velocity)
 
 
 func set_snap(is_enabled: bool) -> void:
@@ -93,9 +111,21 @@ func get_gravity() -> float:
 	return _jump_gravity if velocity.y < 0.0 else _fall_gravity
 
 
-func jump_player() -> void:
-	set_snap(false)
+func clamp_speed() -> void:
+	velocity.x = clamp(velocity.x, -terminal_speed, terminal_speed)
+	velocity.y = clamp(velocity.y, -terminal_speed, terminal_speed)
 
+
+func apply_friction() -> void:
+	if player.is_on_floor():
+		velocity.x = lerp(velocity.x, 0, on_floor_friction)
+		
+	else:
+		velocity.x = lerp(velocity.x, 0, in_air_friction)
+
+
+# Jump funcs
+func jump_player() -> void:
 	velocity.y -= velocity.y
 	velocity.y += _jump_velocity
 
@@ -105,16 +135,13 @@ func set_jump_variables() -> void:
 	_jump_gravity = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
 	_fall_gravity = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
 
-
 func set_jump_height(value : float) -> void:
 	jump_height = value
 	set_jump_variables()
 
-
 func set_jump_time_to_peak(value : float) -> void:
 	jump_time_to_peak = value
 	set_jump_variables()
-
 
 func set_jump_time_to_descent(value : float) -> void:
 	jump_time_to_descent = value

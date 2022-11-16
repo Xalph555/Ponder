@@ -20,9 +20,6 @@ func input(event: InputEvent) -> void:
 
 
 func physics_process(delta: float) -> void:
-	# player.velocity.y += player.gravity
-	# player.velocity = player.move_and_slide(player.velocity, Vector2.UP)
-
 	player.player_movement.move_player(delta)
 
 	if !player.is_on_floor() and player.player_movement.velocity.y > 0:
