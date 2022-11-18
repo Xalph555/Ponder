@@ -1,9 +1,9 @@
-# Player Walk State
+# Player Item Override State
 # --------------------------------
-extends PlayerMoveState
+extends PlayerBaseState
 
 
 # Functions:
 #---------------------------------------
 func get_state_name() -> String:
-	return "Player Walk"
+	return "Player Item Override"

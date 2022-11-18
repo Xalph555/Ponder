@@ -18,7 +18,6 @@ onready var limit_speed := max_speed
 export var on_floor_friction := 0.25
 export var in_air_friction := 0.2
 
-
 # Move and Slide variables
 var _up_dir := Vector2.UP
 var _snap_dir := Vector2.DOWN
@@ -34,7 +33,6 @@ var _snap_vector := _snap_dir * _snap_vec_len
 
 var velocity := Vector2.ZERO
 
-
 # Jump variables
 export var jump_height := 38.0 setget set_jump_height
 export var jump_time_to_peak := 0.4 setget set_jump_time_to_peak
@@ -44,14 +42,13 @@ var _jump_velocity : float
 var _jump_gravity : float
 var _fall_gravity : float
 
-
 # other
-var player: PlayerV2
+var player: Player
 
 
 # Functions:
 #---------------------------------------
-func init(new_player: PlayerV2) -> void:
+func init(new_player: Player) -> void:
 	set_jump_variables()
 
 	_max_slope_angle = deg2rad(_max_slope_angle)
@@ -77,12 +74,12 @@ func move_player(delta: float, dir := Vector2.ZERO, friction_applied := true) ->
 
 func player_move_and_slide() -> void:
 	velocity = player.move_and_slide_with_snap(velocity, 
-												   _snap_vector, 
-												   _up_dir, 
-												   _do_stop_on_slope, 
-												   _max_slides, 
-												   _max_slope_angle, 
-												   _has_infinite_inertia)
+												_snap_vector, 
+												_up_dir, 
+												_do_stop_on_slope, 
+												_max_slides, 
+												_max_slope_angle, 
+												_has_infinite_inertia)
 	
 	# this was my old movement code - things seem to work fine without this? (16/11/2022)
 

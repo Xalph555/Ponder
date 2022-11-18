@@ -2,7 +2,6 @@
 # Player Script                        #
 #--------------------------------------#
 extends KinematicBody2D
-class_name Player
 
 
 # Signals:

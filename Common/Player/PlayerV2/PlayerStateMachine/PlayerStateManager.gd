@@ -10,7 +10,7 @@ extends BaseStateManager
 
 # Functions:
 #---------------------------------------
-func init(new_player: PlayerV2) -> void:
+func init(new_player: Player) -> void:
 	states[PlayerBaseState.State.IDLE] = $Idle
 	states[PlayerBaseState.State.WALK] = $Walk
 	states[PlayerBaseState.State.FALL] = $Fall

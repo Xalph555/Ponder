@@ -1,5 +1,4 @@
-# Player Base State
-# ------------------------------
+
 extends BaseState
 class_name PlayerBaseState
 
@@ -11,10 +10,11 @@ enum State {
 	IDLE,
 	WALK,
 	FALL,
-	JUMP
+	JUMP,
+	ITEM_OVERRIDE
 }
 
-var player: PlayerV2
+var player: Player
 
 
 # Functions:

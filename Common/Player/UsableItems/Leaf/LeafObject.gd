@@ -50,7 +50,6 @@ func set_leaf_properties(grav : float, accel: float, m_speed : float, air_fric_x
 	wind_force_multiplier = wind_multi
 
 
-
 func _physics_process(delta: float) -> void:
 	if not parent: 
 		return

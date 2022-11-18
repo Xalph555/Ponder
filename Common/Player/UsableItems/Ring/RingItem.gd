@@ -1,7 +1,7 @@
 #--------------------------------------#
 # Ring Item Script                     #
 #--------------------------------------#
-extends Node2D
+extends BaseItem
 class_name RingItem
 
 
@@ -20,12 +20,12 @@ export(float) var base_damage := 0.08
 
 var _ring_instance : RingObject
 
-onready var parent = get_parent().get_parent() as Player
-
 
 # Functions:
 #--------------------------------------
-func _ready() -> void:
+func init(new_player: Player) -> void:
+	.init(new_player)
+
 	set_active_item(false)
 
 
@@ -38,6 +38,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func set_active_item(is_active : bool) -> void:
+	.set_active_item(is_active)
+
 	set_process_unhandled_input(is_active)
 
 	if not is_active:
@@ -45,22 +47,22 @@ func set_active_item(is_active : bool) -> void:
 
 
 func spawn_ring() -> void:
-	if parent:
-		parent.player_handles_movement = false
+	if player:
+		player.player_handles_movement = false
 		
 		_ring_instance = ring_object.instance()
 		
 		get_tree().get_root().add_child(_ring_instance)
 		
-		_ring_instance.set_up_ring(parent, parent.velocity, parent.global_position, position_offset)
+		_ring_instance.set_up_ring(player, player.velocity, player.global_position, position_offset)
 
 		_ring_instance.set_ring_properties(max_vertical_speed, vertical_accel, max_horizontal_speed, horizontal_accel, base_damage)
 
 
 func destroy_ring() -> void:
 	if _ring_instance:
-		parent.player_handles_movement = true
-		parent.velocity = _ring_instance.velocity
+		player.player_handles_movement = true
+		player.velocity = _ring_instance.velocity
 		
 		_ring_instance.call_deferred("free")
 		_ring_instance = null

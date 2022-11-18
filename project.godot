@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node2D",
+"class": "BaseItem",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/BaseItem.gd"
+}, {
 "base": "Node",
 "class": "BaseState",
 "language": "GDScript",
@@ -39,12 +44,17 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Areas/HitHurtBox/HurtBox.gd"
 }, {
+"base": "Node2D",
+"class": "ItemManager",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/ItemManager.gd"
+}, {
 "base": "Resource",
 "class": "LeafDefaultValues",
 "language": "GDScript",
 "path": "res://Common/Player/UsableItems/Leaf/ResLeafDefaultValue.gd"
 }, {
-"base": "Node2D",
+"base": "BaseItem",
 "class": "LeafItem",
 "language": "GDScript",
 "path": "res://Common/Player/UsableItems/Leaf/LeafItem.gd"
@@ -77,7 +87,7 @@ _global_script_classes=[ {
 "base": "KinematicBody2D",
 "class": "Player",
 "language": "GDScript",
-"path": "res://Common/Player/Player/Player.gd"
+"path": "res://Common/Player/PlayerV2/PlayerV2.gd"
 }, {
 "base": "BaseState",
 "class": "PlayerBaseState",
@@ -99,11 +109,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Player/PlayerMovement.gd"
 }, {
-"base": "KinematicBody2D",
-"class": "PlayerV2",
-"language": "GDScript",
-"path": "res://Common/Player/PlayerV2/PlayerV2.gd"
-}, {
 "base": "HBoxContainer",
 "class": "PropertySetterNumeric",
 "language": "GDScript",
@@ -114,7 +119,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Player/UsableItems/Ring/ResRingDefaulValue.gd"
 }, {
-"base": "Node2D",
+"base": "BaseItem",
 "class": "RingItem",
 "language": "GDScript",
 "path": "res://Common/Player/UsableItems/Ring/RingItem.gd"
@@ -135,12 +140,14 @@ _global_script_classes=[ {
 "path": "res://Common/LevelElements/WindAreas/WindArea.gd"
 } ]
 _global_script_class_icons={
+"BaseItem": "",
 "BaseState": "",
 "BaseStateManager": "",
 "DefaultSaveWrapper": "",
 "DynamicPropertyPanel": "",
 "Hitbox": "",
 "Hurtbox": "",
+"ItemManager": "",
 "LeafDefaultValues": "",
 "LeafItem": "",
 "LeafObject": "",
@@ -153,7 +160,6 @@ _global_script_class_icons={
 "PlayerDefaultValues": "",
 "PlayerMoveState": "",
 "PlayerMovement": "",
-"PlayerV2": "",
 "PropertySetterNumeric": "",
 "RingDefaultValues": "",
 "RingItem": "",

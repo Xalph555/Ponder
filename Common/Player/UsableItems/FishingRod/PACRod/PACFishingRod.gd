@@ -1,7 +1,7 @@
 #--------------------------------------#
 # PAC Fishing Rod Script               #
 #--------------------------------------#
-extends Node2D
+extends BaseItem
 
 
 # Variables:
@@ -48,18 +48,19 @@ onready var _anim_pivot := $PivotPoint/AnimationPivot
 
 onready var _tween := $Tween
 
-onready var parent = get_parent().get_parent() as Player
-
 
 # Functions:
 #---------------------------------------
-func _ready() -> void:
+func init(new_player: Player) -> void:
+	.init(new_player)
+
 	_pivot_point.rotation_degrees = rod_start_angle
-	
 	set_active_item(false)
 
 
 func set_active_item(is_active : bool) -> void:
+	.set_active_item(is_active)
+
 	release_grapple()
 	set_process_unhandled_input(is_active)
 	self.visible = is_active
@@ -78,17 +79,17 @@ func _physics_process(delta: float) -> void:
 		if _hook_instance.is_hooked:
 			line_dist_adjust()
 			
-			if not parent.is_on_floor() and _distance_to_hook > max(1, _line_length - min_line_length):
-				if parent.player_handles_movement:
+			if not player.is_on_floor() and _distance_to_hook > max(1, _line_length - min_line_length):
+				if player.player_handles_movement:
 					# angular_velocity = sign(parent.velocity.x) * (parent.velocity.length() / _line_length)
-					convert_parent_velocity(parent.velocity)
-					parent.player_handles_movement = false
+					convert_parent_velocity(player.velocity)
+					player.player_handles_movement = false
 					
 				apply_tension()
 			
 			else:
 				# if not parent.player_handles_movement:
-				parent.player_handles_movement = true
+				player.player_handles_movement = true
 
 
 func _draw() -> void:
@@ -210,7 +211,7 @@ func release_grapple() -> void:
 		_hook_instance.release()
 		_hook_instance = null
 		
-		parent.player_handles_movement = true
+		player.player_handles_movement = true
 	
 	_tween.interpolate_property(_pivot_point, "rotation_degrees", 
 								_pivot_point.rotation_degrees, rod_start_angle, 
@@ -224,7 +225,7 @@ func release_grapple() -> void:
 
 
 func line_dist_adjust() -> void:
-	var parent_dir_hook = parent.global_position.direction_to(_hook_instance.global_position)
+	var parent_dir_hook = player.global_position.direction_to(_hook_instance.global_position)
 	var hook_point_dir_hook = _hook_point.global_position.direction_to(_hook_instance.global_position)
 	
 	if parent_dir_hook.dot(hook_point_dir_hook) < 0:
@@ -235,11 +236,11 @@ func line_dist_adjust() -> void:
 	if _distance_to_hook > _line_length:
 		# parent.player_can_set_snap = false
 		# parent.disable_snap_vector()
-		parent.disable_snap_vector()
+		player.disable_snap_vector()
 		# parent.call_deferred("disable_snap_vector")
 		
 		pullback_vel = _hook_dir * (hook_reel_speed * 10) # need multiplier to give enough force
-		parent.velocity =  pullback_vel
+		player.velocity =  pullback_vel
 		
 	else:
 		# parent.player_can_set_snap = true
@@ -270,10 +271,10 @@ func apply_tension() -> void:
 	
 #	print("s force: ", s_force)
 	
-	parent.velocity = s_force
+	player.velocity = s_force
 	
-	if parent.velocity.length() > max_swing_speed:
-		parent.velocity = parent.velocity.normalized() * max_swing_speed
+	if player.velocity.length() > max_swing_speed:
+		player.velocity = player.velocity.normalized() * max_swing_speed
 	
 #	print("speed: ", parent.velocity.length())
 

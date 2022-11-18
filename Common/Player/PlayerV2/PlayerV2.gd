@@ -1,13 +1,14 @@
 # Player V2
 # ---------------------------------
 extends KinematicBody2D
-class_name PlayerV2
+class_name Player
 
 
 # Variables:
 #---------------------------------------
-onready var state_manager := $PlayerStateMachine
 onready var player_movement := $PlayerMovement
+onready var state_manager := $PlayerStateMachine
+onready var item_manager := $ItemManager
 
 onready var _sprite := $Sprite
 
@@ -21,6 +22,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	state_manager.input(event)
+	item_manager.input(event)
 
 
 func _process(delta: float) -> void:
@@ -34,8 +36,8 @@ func _physics_process(delta: float) -> void:
 func update_sprite (facing_dir: Vector2) -> void:
 	if facing_dir.x > 0:
 		_sprite.scale.x = 1
-		# $ActiveTool.scale.x = 1
+		# item_manager.scale.x = 1
 		
 	elif facing_dir.x < 0:
 		_sprite.scale.x = -1
-		# $ActiveTool.scale.x = -1
+		# item_manager.scale.x = -1

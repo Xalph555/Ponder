@@ -20,12 +20,6 @@ tile_data = PoolIntArray( -4718646, 4, 0, -4653110, 4, 0, -4653099, 4, 0, -46530
 position = Vector2( -808, -1090 )
 max_health = 25.0
 
-[node name="TestBreakableBlock129" parent="BLocks" instance=ExtResource( 1 )]
-position = Vector2( 68.9999, -11.0002 )
-rotation = -1.3947
-scale = Vector2( 40.7331, 0.838691 )
-max_health = 25.0
-
 [node name="TestBreakableBlock2" parent="BLocks" instance=ExtResource( 1 )]
 position = Vector2( -796, -1090 )
 max_health = 25.0

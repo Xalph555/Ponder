@@ -1,8 +1,7 @@
 #--------------------------------------#
 # Leaf Item Script                     #
 #--------------------------------------#
-extends Node2D
-
+extends BaseItem
 class_name LeafItem
 
 
@@ -23,12 +22,11 @@ export(float) var wind_force_multiplier := 4.0
 
 var _leaf_instance : LeafObject
 
-onready var parent = get_parent().get_parent() as Player
-
 
 # Functions:
 #--------------------------------------
-func _ready() -> void:
+func init(new_player: Player) -> void:
+	.init(new_player)
 	set_active_item(false)
 
 
@@ -41,6 +39,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func set_active_item(is_active : bool) -> void:
+	.set_active_item(is_active)
+
 	set_process_unhandled_input(is_active)
 
 	if not is_active:
@@ -48,22 +48,22 @@ func set_active_item(is_active : bool) -> void:
 
 
 func spawn_leaf() -> void:
-	if parent:
+	if player:
 		_leaf_instance = leaf_object.instance()
 		
 		add_child(_leaf_instance)
 		
-		_leaf_instance.set_up_leaf(parent, parent.velocity, parent.global_position + placement_offset)
+		_leaf_instance.set_up_leaf(player, player.velocity, player.global_position + placement_offset)
 		
 		_leaf_instance.set_leaf_properties(gravity, acceleration, max_speed, in_air_friction_x, in_air_friction_y, wind_force_multiplier)
 
 
 func destroy_leaf() -> void:
 	if _leaf_instance:		
-		parent.velocity = _leaf_instance.velocity
+		player.velocity = _leaf_instance.velocity
 
 		_leaf_instance.call_deferred("free")
 		_leaf_instance = null
 
-		parent.player_handles_movement = true
-		# parent.player_can_set_snap = true
+		player.player_handles_movement = true
+		# player.player_can_set_snap = true
