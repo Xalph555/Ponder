@@ -6,17 +6,18 @@ class_name PlayerMovement
 
 # Variables:
 #---------------------------------------
-export(float) var gravity := 100.0
 
 # Horizontal movement
 export(float) var terminal_speed := 4500.0
 export var acceleration:= 50.0
 
-export var max_speed := 400.0
+export(float) var max_speed := 400.0
 onready var limit_speed := max_speed
 
-export var on_floor_friction := 0.25
-export var in_air_friction := 0.2
+export(float) var limit_max_transition := 0.2
+
+export(float) var on_floor_friction := 0.25
+export(float) var in_air_friction := 0.2
 
 # Move and Slide variables
 var _up_dir := Vector2.UP
@@ -34,9 +35,9 @@ var _snap_vector := _snap_dir * _snap_vec_len
 var velocity := Vector2.ZERO
 
 # Jump variables
-export var jump_height := 38.0 setget set_jump_height
-export var jump_time_to_peak := 0.4 setget set_jump_time_to_peak
-export var jump_time_to_descent := 0.4 setget set_jump_time_to_descent
+export(float) var jump_height := 38.0 setget set_jump_height
+export(float) var jump_time_to_peak := 0.4 setget set_jump_time_to_peak
+export(float) var jump_time_to_descent := 0.4 setget set_jump_time_to_descent
 
 var _jump_velocity : float
 var _jump_gravity : float
@@ -56,16 +57,16 @@ func init(new_player: Player) -> void:
 	player = new_player
 
 
-func move_player(delta: float, dir := Vector2.ZERO, friction_applied := true) -> void:
-	velocity.y += get_gravity() * delta
+func move_player(delta: float, dir := Vector2.ZERO, accel := acceleration, speed_limit := limit_speed, speed_max := max_speed, speed_transition := limit_max_transition, apply_default_friction := true, floor_friction := on_floor_friction, air_friction := in_air_friction, speed_terminal := terminal_speed, gravity := get_gravity()) -> void:
+	velocity.y += gravity * delta
 	
-	velocity.x = clamp(velocity.x + dir.x * acceleration, -limit_speed, limit_speed)
-	limit_speed = lerp(limit_speed, max_speed, 0.02)
+	velocity.x = clamp(velocity.x + dir.x * accel, -speed_limit, speed_limit)
+	limit_speed = lerp(speed_limit, speed_max, speed_transition)
 
-	if friction_applied:
-		apply_friction()
-	
-	clamp_speed()
+	if apply_default_friction:
+		apply_default_friction(floor_friction, air_friction)
+
+	clamp_terminal_speed(speed_terminal)
 
 	player_move_and_slide()
 	
@@ -112,21 +113,29 @@ func set_snap(is_enabled: bool) -> void:
 	# print("is snap vector enabled: ", is_enabled)
 
 
+func set_velocity(new_velocity: Vector2) -> void:
+	velocity = new_velocity
+
+
+func add_velocity(vel_to_add: Vector2) -> void:
+	velocity += vel_to_add
+
+
 func get_gravity() -> float:
 	return _jump_gravity if velocity.y < 0.0 else _fall_gravity
 
 
-func clamp_speed() -> void:
-	velocity.x = clamp(velocity.x, -terminal_speed, terminal_speed)
-	velocity.y = clamp(velocity.y, -terminal_speed, terminal_speed)
+func clamp_terminal_speed(speed_terminal: float) -> void:
+	velocity.x = clamp(velocity.x, -speed_terminal, speed_terminal)
+	velocity.y = clamp(velocity.y, -speed_terminal, speed_terminal)
 
 
-func apply_friction() -> void:
+func apply_default_friction(floor_friction : float, air_friciton: float) -> void:
 	if player.is_on_floor():
-		velocity.x = lerp(velocity.x, 0, on_floor_friction)
+		velocity.x = lerp(velocity.x, 0, floor_friction)
 		
 	else:
-		velocity.x = lerp(velocity.x, 0, in_air_friction)
+		velocity.x = lerp(velocity.x, 0, air_friciton)
 
 
 # Jump funcs

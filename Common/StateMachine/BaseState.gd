@@ -4,6 +4,12 @@ extends Node
 class_name BaseState
 
 
+# Signals:
+#---------------------------------------
+signal state_entered
+signal state_exited
+
+
 # Variables:
 #---------------------------------------
 

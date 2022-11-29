@@ -22,6 +22,12 @@ func enter(arg := {}) -> void:
 		_coyote_timer = coyote_delay
 
 		# print("Falling and can jump")
+	
+	emit_signal("state_entered")
+
+
+func exit() -> void:
+	emit_signal("state_exited")
 
 
 func input(event: InputEvent) -> void:

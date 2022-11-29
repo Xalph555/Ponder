@@ -10,6 +10,12 @@ func enter(arg := {}) -> void:
 
 	player.player_movement.velocity.x = 0
 
+	emit_signal("state_entered")
+
+
+func exit() -> void:
+	emit_signal("state_exited")
+
 
 func input(event: InputEvent) -> void:
 	if event.is_action_pressed("move_left") or event.is_action_pressed("move_right"):

@@ -10,6 +10,12 @@ func enter(arg := {}) -> void:
 	player.player_movement.set_snap(false)
 	player.player_movement.jump_player()
 
+	emit_signal("state_entered")
+
+
+func exit() -> void:
+	emit_signal("state_exited")
+
 
 func physics_process(delta: float) -> void:
 	var input_dir = Vector2.ZERO

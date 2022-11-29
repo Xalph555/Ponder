@@ -25,16 +25,7 @@ var _ring_instance : RingObject
 #--------------------------------------
 func init(new_player: Player) -> void:
 	.init(new_player)
-
 	set_active_item(false)
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("Action1"):
-		spawn_ring()
-	
-	if event.is_action_released("Action1"):
-		destroy_ring()
 
 
 func set_active_item(is_active : bool) -> void:
@@ -43,6 +34,14 @@ func set_active_item(is_active : bool) -> void:
 	set_process_unhandled_input(is_active)
 
 	if not is_active:
+		destroy_ring()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Action1"):
+		spawn_ring()
+	
+	if event.is_action_released("Action1"):
 		destroy_ring()
 
 

@@ -2,141 +2,102 @@
 # Leaf Object Script                   #
 #--------------------------------------#
 extends KinematicBody2D
-
 class_name LeafObject
 
 
 # Variables:
 #---------------------------------------
-const _TERMINAL_SPEED := 4500.0
+var gravity : float
 
-export(float) var gravity := 60.0
+var terminal_speed : float
+var acceleration : float
+var max_speed : float
+var limit_speed : float
 
-export(float) var acceleration := 5.0
-export(float) var max_speed := 180.0
+var limit_max_transition : float
 
-onready var limit_speed := max_speed
+var in_air_friction_x : float
+var in_air_friction_y : float
 
-export(float) var in_air_friction_x := 0.009
-export(float) var in_air_friction_y := 0.035
+var wind_force_multiplier : float
 
-export(float) var wind_force_multiplier := 4.0
-
-var velocity := Vector2.ZERO
-var _input_dir := Vector2.ZERO
-
-var parent : Player
-
-var _just_entered_gliding := false
-var _is_being_pushed := false
-
-onready var _wind_timer := $ApplyWindTimer
+var player : Player
 
 
 # Functions:
 #---------------------------------------
-func set_up_leaf(leaf_parent : Node, parent_velocity : Vector2, global_pos : Vector2) -> void:
-	parent = leaf_parent
-	velocity = parent_velocity
+func set_up_leaf(new_player : Node, global_pos : Vector2, grav : float, speed_terminal : float, accel: float, speed_max : float, transition_lim_max : float, air_fric_x : float, air_fric_y : float, wind_multi : float) -> void:
+	player = new_player
 	global_position = global_pos
 
-
-func set_leaf_properties(grav : float, accel: float, m_speed : float, air_fric_x : float, air_fric_y : float, wind_multi : float) -> void:
 	gravity = grav
+
+	terminal_speed = speed_terminal
 	acceleration = accel
-	max_speed = m_speed
+	max_speed = speed_max
+	limit_speed = max_speed
+
+	limit_max_transition = transition_lim_max
+
 	in_air_friction_x = air_fric_x
 	in_air_friction_y = air_fric_y
+
 	wind_force_multiplier = wind_multi
 
 
 func _physics_process(delta: float) -> void:
-	if not parent: 
+	if not player:
 		return
-
-	update_inputs()		
-
-	#print("Input_dir Leaf: ", _input_dir)
 	
-	if not parent.is_on_floor() or _is_being_pushed:
-		switch_gliding(true)
-		apply_glide(delta)
-		#print("should be able to glide")
+	if player.state_manager.current_state == PlayerBaseState.State.ITEM_OVERRIDE:
+		# print("leaf is in control")
 
-	else:
-		switch_gliding(false)
-		#print("should not be able to glide")
+		var input_dir = get_movement_input()
+		# print("leaf input dir: ", input_dir)
 
+		player.player_movement.move_player(delta, input_dir, acceleration, limit_speed, max_speed, limit_max_transition, false, 0, 0, terminal_speed, gravity)
 
-func update_inputs() -> void:
-	_input_dir.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-
-	_input_dir = _input_dir.normalized()
-
-
-# gliding
-func apply_glide(delta : float) -> void:
-	velocity.y += gravity * delta
-
-	velocity.x = clamp(velocity.x + _input_dir.x * acceleration, -limit_speed, limit_speed)
+		# player.player_movement.move_player(delta, input_dir)
 	
-	limit_speed = lerp(limit_speed, max_speed, 0.01)
+		apply_friction()
 
-	apply_friction()
-	clamp_speed()
+		player.update_sprite(input_dir)
 
-	parent.velocity = velocity
-
-
-func switch_gliding(can_glide : bool) -> void:
-	if can_glide:
-		if _just_entered_gliding:
-			#print("entered gliding")
-			return
-		
-		_just_entered_gliding = true
-
-		parent.player_handles_movement = false
-		parent.disable_snap_vector()
-		# parent.player_can_set_snap = false
-
-		velocity = parent.velocity
-
+		if player.is_on_floor():
+			player.state_manager.set_item_override(false, {}, {no_jump = true})
+			# set_gliding(false)
+	
 	else:
-		if not _just_entered_gliding:
-			#print("exit gliding")
-			return
-		
-		_just_entered_gliding = false
+		# print("leaf is not in control")
+		pass
 
-		parent.player_handles_movement = true
-		# parent.player_can_set_snap = true
 
-		parent.velocity = velocity
-		
+func get_movement_input() -> Vector2:
+	var input_dir = Vector2.ZERO
 
-# Speed-related functions
+	if Input.is_action_pressed("move_left"):
+		input_dir.x = -1
+	
+	if Input.is_action_pressed("move_right"):
+		input_dir.x = 1
+
+	return input_dir
+
+
 func apply_friction() -> void:
-	velocity.x = lerp(velocity.x, 0, in_air_friction_x)
-	velocity.y = lerp(velocity.y, 0, in_air_friction_y)
+	var current_velocity = player.player_movement.velocity
+
+	current_velocity.x = lerp(current_velocity.x, 0, in_air_friction_x)
+	current_velocity.y = lerp(current_velocity.y, 0, in_air_friction_y)
+
+	player.player_movement.set_velocity(current_velocity)
 
 
-func clamp_speed() -> void:
-	velocity.x = clamp(velocity.x, -_TERMINAL_SPEED, _TERMINAL_SPEED)
-	velocity.y = clamp(velocity.y, -_TERMINAL_SPEED, _TERMINAL_SPEED)
-
-
-# other
 func apply_wind(wind_force : Vector2) -> void:
-	_is_being_pushed = true
-	velocity += wind_force * wind_force_multiplier
+	if player.state_manager.current_state != PlayerBaseState.State.ITEM_OVERRIDE:
+		player.state_manager.set_item_override(true)
+		# set_gliding(true)
 
-	_wind_timer.start()
+	player.player_movement.add_velocity(wind_force * wind_force_multiplier)
 
 	# print("I, the mighty leaf, is being pushed by the wind")
-
-
-func _on_ApplyWindTimer_timeout() -> void:
-	_is_being_pushed = false
-	# print("can no longer be pushed - leaf")
-	

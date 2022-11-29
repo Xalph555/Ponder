@@ -699,6 +699,9 @@ settings_resource = ExtResource( 7 )
 anims/ExportedChanges = SubResource( 1 )
 anims/RESET = SubResource( 2 )
 
+[node name="FileDialog" parent="CanvasLayer/PrototypeUI/Settings/FishingRodProperties" index="2"]
+show_hidden_files = true
+
 [node name="PanelContainer" parent="CanvasLayer/PrototypeUI/Settings/FishingRodProperties" index="4"]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -713,6 +716,9 @@ settings_resource = ExtResource( 8 )
 anims/ExportedChanges = SubResource( 3 )
 anims/RESET = SubResource( 4 )
 
+[node name="FileDialog" parent="CanvasLayer/PrototypeUI/Settings/LeafProperties" index="2"]
+show_hidden_files = true
+
 [node name="PanelContainer" parent="CanvasLayer/PrototypeUI/Settings/LeafProperties" index="4"]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -726,6 +732,9 @@ settings_resource = ExtResource( 9 )
 [node name="AnimationPlayer" parent="CanvasLayer/PrototypeUI/Settings/RingProperties" index="0"]
 anims/ExportedChanges = SubResource( 5 )
 anims/RESET = SubResource( 6 )
+
+[node name="FileDialog" parent="CanvasLayer/PrototypeUI/Settings/RingProperties" index="2"]
+show_hidden_files = true
 
 [node name="PanelContainer" parent="CanvasLayer/PrototypeUI/Settings/RingProperties" index="4"]
 anchor_left = 1.0
