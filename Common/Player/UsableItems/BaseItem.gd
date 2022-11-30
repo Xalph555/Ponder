@@ -6,12 +6,12 @@ class_name BaseItem
 
 # Variables:
 #---------------------------------------
-var player: Player
+var player : Player
 
 
 # Functions:
 #---------------------------------------
-func init(new_player: Player) -> void:
+func init(new_player : Player) -> void:
 	player = new_player
 
 

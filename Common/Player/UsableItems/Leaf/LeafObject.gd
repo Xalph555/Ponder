@@ -6,7 +6,7 @@ class_name LeafObject
 
 
 # Variables:
-#---------------------------------------
+#--------------------------------------
 var gravity : float
 
 var terminal_speed : float
@@ -26,7 +26,9 @@ var player : Player
 
 # Functions:
 #---------------------------------------
-func set_up_leaf(new_player : Node, global_pos : Vector2, grav : float, speed_terminal : float, accel: float, speed_max : float, transition_lim_max : float, air_fric_x : float, air_fric_y : float, wind_multi : float) -> void:
+func set_up_leaf(new_player : Player, global_pos : Vector2, grav : float, speed_terminal : float, \
+	accel: float, speed_max : float, transition_lim_max : float, air_fric_x : float, air_fric_y : float, \
+	wind_multi : float) -> void:
 	player = new_player
 	global_position = global_pos
 
@@ -55,17 +57,26 @@ func _physics_process(delta: float) -> void:
 		var input_dir = get_movement_input()
 		# print("leaf input dir: ", input_dir)
 
-		player.player_movement.move_player(delta, input_dir, acceleration, limit_speed, max_speed, limit_max_transition, false, 0, 0, terminal_speed, gravity)
-
-		# player.player_movement.move_player(delta, input_dir)
+		player.player_movement.move_player(delta, input_dir, acceleration, limit_speed, max_speed, \
+		limit_max_transition, false, 0, 0, terminal_speed, gravity)
 	
 		apply_friction()
 
 		player.update_sprite(input_dir)
 
 		if player.is_on_floor():
-			player.state_manager.set_item_override(false, {}, {no_jump = true})
-			# set_gliding(false)
+			if not player.is_on_floor():
+				player.state_manager.change_state(PlayerBaseState.State.FALL, {no_jump = true})
+				return
+			
+			if player.is_on_floor():
+				player.player_movement.set_snap(true)
+	
+				if player.player_movement.velocity.length_squared() > 0.0:
+					player.state_manager.change_state(PlayerBaseState.State.WALK)
+	
+				else:
+					player.state_manager.change_state(PlayerBaseState.State.IDLE)
 	
 	else:
 		# print("leaf is not in control")
@@ -95,8 +106,8 @@ func apply_friction() -> void:
 
 func apply_wind(wind_force : Vector2) -> void:
 	if player.state_manager.current_state != PlayerBaseState.State.ITEM_OVERRIDE:
-		player.state_manager.set_item_override(true)
-		# set_gliding(true)
+		player.state_manager.change_state(PlayerBaseState.State.ITEM_OVERRIDE)
+		player.player_movement.set_snap(false)
 
 	player.player_movement.add_velocity(wind_force * wind_force_multiplier)
 

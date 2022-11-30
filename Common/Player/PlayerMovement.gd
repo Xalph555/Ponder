@@ -43,6 +43,9 @@ var _jump_velocity : float
 var _jump_gravity : float
 var _fall_gravity : float
 
+# wind
+export(float) var wind_force_multiplier := 1.0
+
 # other
 var player: Player
 
@@ -57,7 +60,10 @@ func init(new_player: Player) -> void:
 	player = new_player
 
 
-func move_player(delta: float, dir := Vector2.ZERO, accel := acceleration, speed_limit := limit_speed, speed_max := max_speed, speed_transition := limit_max_transition, apply_default_friction := true, floor_friction := on_floor_friction, air_friction := in_air_friction, speed_terminal := terminal_speed, gravity := get_gravity()) -> void:
+func move_player(delta: float, dir := Vector2.ZERO, accel := acceleration, speed_limit := limit_speed, \
+	speed_max := max_speed, speed_transition := limit_max_transition, apply_default_friction := true, \
+	floor_friction := on_floor_friction, air_friction := in_air_friction, speed_terminal := terminal_speed, \
+	gravity := get_gravity()) -> void:
 	velocity.y += gravity * delta
 	
 	velocity.x = clamp(velocity.x + dir.x * accel, -speed_limit, speed_limit)
@@ -160,3 +166,11 @@ func set_jump_time_to_peak(value : float) -> void:
 func set_jump_time_to_descent(value : float) -> void:
 	jump_time_to_descent = value
 	set_jump_variables()
+
+
+func apply_wind(wind_force : Vector2) -> void:	
+	# print("wind is being applied to player")
+	
+	if player.state_manager.current_state != PlayerBaseState.State.ITEM_OVERRIDE:
+		set_snap(false)
+		add_velocity(wind_force * wind_force_multiplier)

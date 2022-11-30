@@ -59,13 +59,12 @@ func spawn_leaf() -> void:
 		
 		add_child(_leaf_instance)
 		
-		_leaf_instance.set_up_leaf(player, player.global_position + placement_offset, gravity, terminal_speed, acceleration, max_speed, limit_max_transition, in_air_friction_x, in_air_friction_y, wind_force_multiplier)
+		_leaf_instance.set_up_leaf(player, player.global_position + placement_offset, gravity, \
+		terminal_speed, acceleration, max_speed, limit_max_transition, in_air_friction_x, in_air_friction_y, wind_force_multiplier)
 
-		# transition player state
 		if player.state_manager.current_state == PlayerBaseState.State.JUMP or \
 			player.state_manager.current_state == PlayerBaseState.State.FALL:
-			player.state_manager.set_item_override(true)
-			# _leaf_instance.set_gliding(true)
+			set_item_override(true)
 
 
 func destroy_leaf() -> void:
@@ -74,11 +73,30 @@ func destroy_leaf() -> void:
 		yield(_leaf_instance, "tree_exited")
 		_leaf_instance = null
 
-		player.state_manager.set_item_override(false, {}, {no_jump = true})
+		set_item_override(false, {}, {no_jump = true})
+
+
+func set_item_override(is_overriding_player: bool, override_args := {}, fall_args := {}, walk_args := {}, idle_args := {}) -> void:
+	if is_overriding_player:
+		player.state_manager.change_state(PlayerBaseState.State.ITEM_OVERRIDE, override_args)
+		player.player_movement.set_snap(false)
+
+	else:
+		if not player.is_on_floor():
+			player.state_manager.change_state(PlayerBaseState.State.FALL, fall_args)
+			return
+		
+		if player.is_on_floor():
+			player.player_movement.set_snap(true)
+
+			if player.player_movement.velocity.length_squared() > 0.0:
+				player.state_manager.change_state(PlayerBaseState.State.WALK, walk_args)
+
+			else:
+				player.state_manager.change_state(PlayerBaseState.State.IDLE, idle_args)
 
 
 func _on_state_changed(new_state : int) -> void:
 	if is_instance_valid(_leaf_instance):
 		if new_state == PlayerBaseState.State.JUMP or new_state == PlayerBaseState.State.FALL:
-			player.state_manager.set_item_override(true)
-			# _leaf_instance.set_gliding(true)
+			set_item_override(true)

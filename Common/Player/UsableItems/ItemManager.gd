@@ -80,8 +80,7 @@ func remove_item(item_num : int) -> void:
 		
 	
 func switch_item(item_num : int) -> void:
-	if item_num == current_item or \
-		item_num < 0 or item_num >= items.size():
+	if item_num == current_item or item_num < 0 or item_num >= items.size():
 		return
 
 	items[current_item].set_active_item(false)

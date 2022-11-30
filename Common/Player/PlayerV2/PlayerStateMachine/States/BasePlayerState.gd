@@ -14,7 +14,7 @@ enum State {
 	ITEM_OVERRIDE
 }
 
-var player: Player
+var player : Player
 
 
 # Functions:
