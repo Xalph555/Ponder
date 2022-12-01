@@ -54,9 +54,7 @@ var player: Player
 #---------------------------------------
 func init(new_player: Player) -> void:
 	set_jump_variables()
-
 	_max_slope_angle = deg2rad(_max_slope_angle)
-
 	player = new_player
 
 
@@ -87,9 +85,10 @@ func player_move_and_slide() -> void:
 												_max_slides, 
 												_max_slope_angle, 
 												_has_infinite_inertia)
+
+	# print("Player Velocity: ", velocity.length())
 	
 	# this was my old movement code - things seem to work fine without this? (16/11/2022)
-
 	# if player.is_on_wall():
 	# 	velocity = player.move_and_slide_with_snap(velocity, 
 	# 											   _snap_vector, 
@@ -168,6 +167,7 @@ func set_jump_time_to_descent(value : float) -> void:
 	set_jump_variables()
 
 
+# other
 func apply_wind(wind_force : Vector2) -> void:	
 	# print("wind is being applied to player")
 	
