@@ -110,7 +110,7 @@ func glide_player(delta : float, input_dir : Vector2) -> void:
 
 	
 func get_movement_input() -> Vector2:
-	var input_dir = Vector2.ZERO
+	var input_dir := Vector2.ZERO
 
 	if Input.is_action_pressed("move_left"):
 		input_dir.x = -1

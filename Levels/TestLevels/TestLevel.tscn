@@ -536,7 +536,7 @@ wind_dir = Vector2( 1, -1 )
 shape = SubResource( 1 )
 
 [node name="PlayerV2" parent="." instance=ExtResource( 5 )]
-position = Vector2( -35, 76 )
+position = Vector2( -660, -1176 )
 __meta__ = {
 "_edit_group_": true
 }

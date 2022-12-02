@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Common/Areas/HitHurtBox/HurtBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Common/Player/TestPlayerSprite.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Common/Player/PlayerMovement.gd" type="Script" id=5]
 [ext_resource path="res://Common/Player/UsableItems/ItemManager.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Common/Player/UsableItems/Leaf/LeafItem.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Common/Player/UsableItems/Ring/RingItem.tscn" type="PackedScene" id=8]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 6.0
@@ -26,7 +27,7 @@ script = ExtResource( 4 )
 script = ExtResource( 5 )
 
 [node name="ItemManager" parent="." instance=ExtResource( 6 )]
-default_items = [ ExtResource( 7 ) ]
+default_items = [ ExtResource( 8 ), ExtResource( 7 ) ]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 0, -40 )

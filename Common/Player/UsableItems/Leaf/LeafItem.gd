@@ -33,7 +33,6 @@ var _leaf_instance : LeafObject
 #--------------------------------------
 func init(new_player: Player) -> void:
 	.init(new_player)
-
 	set_active_item(false)
 
 

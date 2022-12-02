@@ -8,15 +8,24 @@ class_name RingItem
 # Variables:
 #---------------------------------------
 export(PackedScene) var ring_object
+
 export(Vector2) var position_offset := Vector2(0, -5)
 
-export(float) var max_vertical_speed := 1000.0
-export(float) var vertical_accel := 30.0
+export(float) var terminal_speed := 4500.0
 
-export(float) var max_horizontal_speed := 80.0
-export(float) var horizontal_accel := 10.0
+export(float) var vertical_acceleration := 150.0
+export(float) var vertical_max_speed := 2000.0
+
+export(float) var horizontal_acceleration := 5.0
+export(float) var horizontal_max_speed := 150.0
+
+export(float) var limit_max_transition := 0.1
+
+export(float) var in_air_friction_x := 0.2
+export(float) var in_air_friction_y := 0.2
 
 export(float) var base_damage := 0.08
+export(float) var damage_velocity_threshold := 400.0
 
 var _ring_instance : RingObject
 
@@ -47,22 +56,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func spawn_ring() -> void:
 	if player:
-		player.player_handles_movement = false
-		
 		_ring_instance = ring_object.instance()
 		
 		get_tree().get_root().add_child(_ring_instance)
 		
-		_ring_instance.set_up_ring(player, player.velocity, player.global_position, position_offset)
-
-		_ring_instance.set_ring_properties(max_vertical_speed, vertical_accel, max_horizontal_speed, horizontal_accel, base_damage)
-
+		_ring_instance.set_up_ring(player, player.player_movement.velocity, player.global_position, position_offset, terminal_speed, vertical_acceleration, vertical_max_speed, horizontal_acceleration, horizontal_max_speed, limit_max_transition, in_air_friction_x, in_air_friction_y, base_damage, damage_velocity_threshold)
+	
 
 func destroy_ring() -> void:
-	if _ring_instance:
-		player.player_handles_movement = true
-		player.velocity = _ring_instance.velocity
-		
+	if is_instance_valid(_ring_instance):
 		_ring_instance.call_deferred("free")
+		yield(_ring_instance, "tree_exited")
 		_ring_instance = null
 
