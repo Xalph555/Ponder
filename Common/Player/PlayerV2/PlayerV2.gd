@@ -37,11 +37,11 @@ func _physics_process(delta: float) -> void:
 func update_sprite (facing_dir: Vector2) -> void:
 	if facing_dir.x > 0:
 		_sprite.scale.x = 1
-		item_manager.scale.x = 1
+		# item_manager.scale.x = 1
 		
 	elif facing_dir.x < 0:
 		_sprite.scale.x = -1
-		item_manager.scale.x = -1
+		# item_manager.scale.x = -1
 
 
 func apply_wind(wind_force : Vector2) -> void:

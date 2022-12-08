@@ -34,6 +34,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/UI/TestingPropertyPanels/DynamicPropertyPanel/DynamicPropertyPanel.gd"
 }, {
+"base": "KinematicBody2D",
+"class": "FishingHook",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/FishingRod/FishingRodV2/FishingHook/FishingHook.gd"
+}, {
+"base": "BaseItem",
+"class": "FishingRod",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/FishingRod/FishingRodV2/FishingRod.gd"
+}, {
 "base": "Area2D",
 "class": "Hitbox",
 "language": "GDScript",
@@ -145,6 +155,8 @@ _global_script_class_icons={
 "BaseStateManager": "",
 "DefaultSaveWrapper": "",
 "DynamicPropertyPanel": "",
+"FishingHook": "",
+"FishingRod": "",
 "Hitbox": "",
 "Hurtbox": "",
 "ItemManager": "",
