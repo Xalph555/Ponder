@@ -15,6 +15,22 @@ export(float) var hook_throwing_force := 800.0
 var is_hooked := false
 var max_line_length : float
 
+export(float) var min_line_length = 2.0
+export(float) var reel_acceleration := 500.0
+
+export(float) var time_to_max_reel := 2.5
+var current_reel_time := 0.0
+
+var is_reeling := false
+
+export(float) var max_tension := 1.1
+export(float) var min_tension := 0.5
+
+export(float) var pull_acceleration := 50.0
+
+export(float) var rotation_limit_check := 10.0
+
+var hook_end_hook_dist : float
 
 onready var pivot_point := $PivotPoint
 onready var hook_end := $PivotPoint/AnimationPivot/HookPoint
@@ -44,9 +60,15 @@ func destroy_rod() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Action1"):
 		throw_hook()
-	
 	if event.is_action_released("Action1"):
 		break_hook()
+
+	if event.is_action_pressed("Action2"):
+		is_reeling = true
+		current_reel_time = 0.0
+
+	if event.is_action_released("Action2"):
+		is_reeling = false
 
 
 func _process(delta: float) -> void:
@@ -55,7 +77,25 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	pass
+
+	if is_reeling:
+		reel_line(delta)
+		print("Max Line Length: ", max_line_length)
+
+	var pull_back_force := 10.0
+
+	if is_hooked:
+		hook_end_hook_dist = hook_end.global_position.distance_to(_hook_instance.global_position)
+
+		if hook_end_hook_dist >= max_line_length:
+			var dir_to_hook := (_hook_instance.global_position - hook_end.global_position).normalized() as Vector2 
+			var force_multiplier := inverse_lerp(max_line_length, max_line_length * max_tension, hook_end_hook_dist)
+
+			var force_back := (dir_to_hook * pull_back_force * force_multiplier) as Vector2
+
+			# print("Force Back: ", force_back)
+
+			player.player_movement.add_velocity(force_back)
 
 
 func _draw() -> void:
@@ -64,14 +104,7 @@ func _draw() -> void:
 
 
 func update_fishing_rod_rotation(delta: float) -> void:
-	var max_tension := 1.1
-	var min_tension := 0.5
-
-	var pull_acceleration := 50.0
-
-	if is_hooked:		
-		var hook_end_hook_dist := hook_end.global_position.distance_to(_hook_instance.global_position) as float
-
+	if is_hooked:
 		var dir_to_mouse := (get_global_mouse_position() - self.global_position).normalized() as Vector2
 		var angle_to_mouse := Vector2.RIGHT.rotated(pivot_point.rotation).angle_to(dir_to_mouse)
 		var angle_weight := abs(angle_to_mouse / PI)
@@ -88,7 +121,7 @@ func update_fishing_rod_rotation(delta: float) -> void:
 				rotation_amount *= tension
 
 			else:
-				if abs(rotation_amount) > 10.0:
+				if abs(rotation_amount) > rotation_limit_check:
 					rotation_amount = 0.0
 
 		pivot_point.rotate(rotation_amount * delta)
@@ -131,6 +164,15 @@ func break_hook() -> void:
 	print("Hook Broken")
 
 
+func reel_line(delta : float) -> void:
+	current_reel_time += delta
+
+	var accel_multiplier := clamp(inverse_lerp(0, time_to_max_reel, current_reel_time), 0.2, 1)
+	var reel_amount := reel_acceleration * accel_multiplier * delta 
+
+	max_line_length = clamp(max_line_length - reel_amount, min_line_length, max_line_length)
+
+
 func _on_hook_hooked() -> void:
 	print("hook_hooked signal received")
 
@@ -139,4 +181,3 @@ func _on_hook_hooked() -> void:
 	
 	is_hooked = true
 	max_line_length = hook_end.global_position.distance_to(_hook_instance.global_position)
-
