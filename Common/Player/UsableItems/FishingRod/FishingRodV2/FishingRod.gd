@@ -61,6 +61,7 @@ onready var pivot_point := $PivotPoint
 onready var hook_end := $PivotPoint/AnimationPivot/HookPoint
 onready var jump_height_ray := $JumpHeightRay
 onready var rod_sprite := $PivotPoint/AnimationPivot/Sprite
+onready var hitbox := $PivotPoint/RodHitBox
 
 
 # Functions:
@@ -90,7 +91,7 @@ func destroy_rod() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("Action1"):
+	if event.is_action_pressed("Action1") and hitbox.get_overlapping_bodies().size() == 0:
 		throw_hook()
 
 	if event.is_action_released("Action1"):
