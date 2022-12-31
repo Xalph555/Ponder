@@ -22,7 +22,9 @@ func enter(arg := {}) -> void:
 		_coyote_timer = coyote_delay
 
 		# print("Falling and can jump")
-	
+
+	player.player_movement.set_snap(false)
+
 	emit_signal("state_entered")
 
 

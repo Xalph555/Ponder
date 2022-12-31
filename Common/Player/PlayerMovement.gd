@@ -85,7 +85,7 @@ func player_move_and_slide() -> void:
 												_max_slides, 
 												_max_slope_angle, 
 												_has_infinite_inertia)
-
+	# print("Player Velocity (X, Y): ", velocity)
 	# print("Player Velocity: ", velocity.length())
 	
 	# this was my old movement code - things seem to work fine without this? (16/11/2022)
@@ -95,7 +95,7 @@ func player_move_and_slide() -> void:
 	# 											   _up_dir, 
 	# 											   _do_stop_on_slope, 
 	# 											   _max_slides, 
-	# 											   _max_slope_angle, 
+	# 											   _max_slope_angle, c
 	# 											   _has_infinite_inertia)
 	
 	# else:
@@ -138,15 +138,25 @@ func clamp_terminal_speed(speed_terminal: float) -> void:
 func apply_default_friction(floor_friction : float, air_friciton: float) -> void:
 	if player.is_on_floor():
 		velocity.x = lerp(velocity.x, 0, floor_friction)
+
+		# if _snap_vector != Vector2.ZERO:
+		# 	velocity.y = lerp(velocity.y, 0, 0.8)
 		
 	else:
 		velocity.x = lerp(velocity.x, 0, air_friciton)
 
+		# if _snap_vector != Vector2.ZERO:
+		# 	velocity.y = lerp(velocity.y, 0, air_friciton)
+
 
 # Jump funcs
 func jump_player() -> void:
+	# print("Player Velocity Before Jump: ", velocity)
+
 	velocity.y -= velocity.y
 	velocity.y += _jump_velocity
+
+	# print("Player Velocity After Jump: ", velocity)
 
 
 func set_jump_variables() -> void:

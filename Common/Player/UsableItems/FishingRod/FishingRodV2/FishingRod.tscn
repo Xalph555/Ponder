@@ -8,6 +8,10 @@
 script = ExtResource( 2 )
 hook_scene = ExtResource( 3 )
 
+[node name="JumpHeightRay" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, 20 )
+
 [node name="PivotPoint" type="Position2D" parent="."]
 
 [node name="AnimationPivot" type="Position2D" parent="PivotPoint"]
@@ -19,4 +23,4 @@ centered = false
 offset = Vector2( -1, -53 )
 
 [node name="HookPoint" type="Position2D" parent="PivotPoint/AnimationPivot"]
-position = Vector2( 51, 0 )
+position = Vector2( 38, 0 )

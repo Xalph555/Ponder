@@ -6,11 +6,14 @@ class_name Player
 
 # Variables:
 #---------------------------------------
+var player_half_height := 0.0
+
 onready var player_movement := $PlayerMovement
 onready var state_manager := $PlayerStateMachine
 onready var item_manager := $ItemManager
 
 onready var _sprite := $Sprite
+onready var capsule_col := $CollisionShape2D
 
 
 # Functions:
@@ -19,6 +22,8 @@ func _ready() -> void:
 	state_manager.init(self)
 	player_movement.init(self)
 	item_manager.init(self)
+
+	player_half_height = capsule_col.shape.radius + (capsule_col.shape.height / 2.0)
 
 
 func _unhandled_input(event: InputEvent) -> void:

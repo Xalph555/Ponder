@@ -23,6 +23,9 @@ var velocity := Vector2.ZERO
 var is_moving := false 
 
 
+onready var col_shape := $LineDistanceVisual/CollisionShape2D
+
+
 # Functions:
 #--------------------------------------
 func _physics_process(delta: float) -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Common/Areas/HitHurtBox/HurtBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Common/Player/TestPlayerSprite.png" type="Texture" id=2]
@@ -6,8 +6,6 @@
 [ext_resource path="res://Common/Player/PlayerV2/PlayerV2.gd" type="Script" id=4]
 [ext_resource path="res://Common/Player/PlayerMovement.gd" type="Script" id=5]
 [ext_resource path="res://Common/Player/UsableItems/ItemManager.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Common/Player/UsableItems/Leaf/LeafItem.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Common/Player/UsableItems/Ring/RingItem.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Common/Player/UsableItems/FishingRod/FishingRodV2/FishingRod.tscn" type="PackedScene" id=9]
 
 [sub_resource type="CapsuleShape2D" id=1]
@@ -51,7 +49,7 @@ collision_mask = 2
 shape = SubResource( 2 )
 
 [node name="ItemManager" parent="." instance=ExtResource( 6 )]
-default_items = [ ExtResource( 9 ), ExtResource( 7 ), ExtResource( 8 ) ]
+default_items = [ ExtResource( 9 ) ]
 
 [editable path="PlayerStateMachine"]
 [editable path="HurtBox"]
