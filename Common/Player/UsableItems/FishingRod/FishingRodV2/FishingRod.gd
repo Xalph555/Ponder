@@ -60,6 +60,7 @@ export(float) var grapple_adjustment_force := 60.0
 onready var pivot_point := $PivotPoint
 onready var hook_end := $PivotPoint/AnimationPivot/HookPoint
 onready var jump_height_ray := $JumpHeightRay
+onready var rod_sprite := $PivotPoint/AnimationPivot/Sprite
 
 
 # Functions:
@@ -109,6 +110,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	update()
+	update_rod_sprite()
 	update_fishing_rod_rotation(delta)
 
 
@@ -197,6 +199,13 @@ func update_fishing_rod_rotation(delta: float) -> void:
 		pivot_point.look_at(get_global_mouse_position())
 
 
+func update_rod_sprite() -> void:
+	if get_movement_input().x > 0:
+		rod_sprite.scale.x = 1
+	else:
+		rod_sprite.scale.x = -1
+
+
 func throw_hook() -> void:
 	if is_instance_valid(_hook_instance) || is_hooked:
 		return
@@ -267,6 +276,8 @@ func grappling(delta : float) -> void:
 	angle_accel += get_movement_input().x * push_force
 
 	# TODO: need to update player sprite facing direction
+
+	player.update_sprite(get_movement_input())
 
 	angular_velocity += angle_accel	
 	angular_velocity *= 0.99
