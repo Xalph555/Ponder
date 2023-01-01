@@ -7,6 +7,7 @@ class_name FishingHook
 # Signals:
 #---------------------------------------
 signal hook_hooked
+signal hook_released
 
 
 # Variables:
@@ -39,6 +40,10 @@ func _physics_process(delta: float) -> void:
 	var collision = move_and_collide(velocity * delta)
 	if collision:
 		handle_collision(collision)
+
+
+func _exit_tree() -> void:
+	emit_signal("hook_released")
 
 
 func handle_collision(col_object : KinematicCollision2D) -> void:

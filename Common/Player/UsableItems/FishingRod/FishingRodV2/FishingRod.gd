@@ -4,6 +4,12 @@ extends BaseItem
 class_name FishingRod
 
 
+# Signals:
+#---------------------------------------
+signal rod_hooked
+signal rod_hook_released
+
+
 # Variables:
 #---------------------------------------
 export(PackedScene) var hook_scene
@@ -114,6 +120,8 @@ func _process(delta: float) -> void:
 	update_rod_sprite()
 	update_fishing_rod_rotation(delta)
 
+	# print("Mouse Position: ", get_global_mouse_position())
+
 
 func _physics_process(delta: float) -> void:
 	if not is_hooked:
@@ -203,7 +211,7 @@ func update_fishing_rod_rotation(delta: float) -> void:
 func update_rod_sprite() -> void:
 	if get_movement_input().x > 0:
 		rod_sprite.scale.x = 1
-	else:
+	elif get_movement_input().x < 0:
 		rod_sprite.scale.x = -1
 
 
@@ -222,6 +230,10 @@ func throw_hook() -> void:
 	var throw_force_mod := clamp(hook_end.global_position.distance_to(get_global_mouse_position()) / 80.0, 0.2, 1.0)
 	if Vector2.RIGHT.rotated(pivot_point.rotation).dot(hook_end.global_position.direction_to(get_global_mouse_position())) < 0:
 		throw_force_mod = 0.2
+
+	# print("Rod throw force: ", throw_force_mod)
+
+	# print("Hook end to mouse: ", hook_end.global_position.distance_to(get_global_mouse_position()))
 
 	_hook_instance.throw_hook(hook_end.global_position, throw_dir, hook_throwing_force * throw_force_mod)
 
@@ -243,9 +255,8 @@ func break_hook() -> void:
 	if (player.state_manager.current_state == PlayerBaseState.State.ITEM_OVERRIDE):
 		if not player.is_on_floor():
 			player.state_manager.change_state(PlayerBaseState.State.FALL, {no_jump = true})
-			return
 		
-		if player.is_on_floor():
+		else:
 			player.player_movement.set_snap(true)
 
 			if player.player_movement.velocity.length_squared() > 0.0:
@@ -254,7 +265,8 @@ func break_hook() -> void:
 			else:
 				player.state_manager.change_state(PlayerBaseState.State.IDLE)
 
-	# print("Hook Broken")
+	emit_signal("rod_hook_released")
+	print("Hook Broken")
 
 
 func reel_line(delta : float) -> void:
@@ -415,6 +427,8 @@ func _on_hook_hooked() -> void:
 	elif player.state_manager.current_state != PlayerBaseState.State.ITEM_OVERRIDE:
 		is_grappling = false
 		# print("Fishing Rod now pulling")
+	
+	emit_signal("rod_hooked")
 	
 
 func _on_state_changed(new_state : int) -> void:

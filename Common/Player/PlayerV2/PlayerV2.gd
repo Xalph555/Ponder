@@ -10,7 +10,8 @@ var player_half_height := 0.0
 
 onready var player_movement := $PlayerMovement
 onready var state_manager := $PlayerStateMachine
-onready var item_manager := $ItemManager
+# onready var item_manager := $ItemManager
+onready var fishing_rod := $FishingRod
 
 onready var _sprite := $Sprite
 onready var capsule_col := $CollisionShape2D
@@ -21,14 +22,17 @@ onready var capsule_col := $CollisionShape2D
 func _ready() -> void:
 	state_manager.init(self)
 	player_movement.init(self)
-	item_manager.init(self)
+	# item_manager.init(self)
+
+	fishing_rod.init(self)
+	fishing_rod.set_active_item(true)
 
 	player_half_height = capsule_col.shape.radius + (capsule_col.shape.height / 2.0)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	state_manager.input(event)
-	item_manager.input(event)
+	# item_manager.input(event)
 
 
 func _process(delta: float) -> void:
