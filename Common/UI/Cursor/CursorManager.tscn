@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Common/UI/Cursor/CursorManager.gd" type="Script" id=1]
 [ext_resource path="res://Common/UI/Cursor/CursorSprites/Ready2Cursor.png" type="Texture" id=2]
 [ext_resource path="res://Common/UI/Cursor/CursorSprites/Ready3Cursor.png" type="Texture" id=3]
 [ext_resource path="res://Common/UI/Cursor/CursorSprites/Ready1Cursor.png" type="Texture" id=4]
 [ext_resource path="res://Common/UI/Cursor/CursorSprites/HookedCursor.png" type="Texture" id=5]
+[ext_resource path="res://Common/UI/Cursor/CursorSprites/ReelingCursor.png" type="Texture" id=6]
 
 [node name="CursorManager" type="Control"]
 script = ExtResource( 1 )
@@ -12,3 +13,4 @@ cursor_ready1 = ExtResource( 4 )
 cursor_ready2 = ExtResource( 2 )
 cursor_ready3 = ExtResource( 3 )
 cursor_hooked = ExtResource( 5 )
+cursor_reeling = ExtResource( 6 )

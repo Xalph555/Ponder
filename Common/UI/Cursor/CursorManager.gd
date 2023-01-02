@@ -9,7 +9,8 @@ enum State {
 	READY1,
 	READY2,
 	READY3,
-	HOOKED
+	HOOKED,
+	REELING
 }
 
 export(NodePath) onready var player_ref = get_node(player_ref) as Player
@@ -19,6 +20,7 @@ export(Texture) var cursor_ready2 = null
 export(Texture) var cursor_ready3 = null
 
 export(Texture) var cursor_hooked = null
+export(Texture) var cursor_reeling = null
 
 var base_window_size := Vector2.ZERO
 var base_cursor_size := Vector2.ZERO
@@ -26,6 +28,8 @@ var cursor_scale := 1.0
 
 # var player : Player
 var fishing_rod : FishingRod
+
+var is_hooked := false
 
 var current_state :int = State.READY1
 
@@ -50,11 +54,14 @@ func init(new_player : Player) -> void:
 	fishing_rod.connect("rod_hooked", self, "_on_rod_hooked")
 	fishing_rod.connect("rod_hook_released", self, "_on_rod_hook_released")
 
+	fishing_rod.connect("rod_reeling", self, "_on_rod_reeling")
+	fishing_rod.connect("rod_reeling_stopped", self, "_on_rod_reeling_stopped")
+
 	set_process(true)
 
 
 func _process(delta: float) -> void:
-	if current_state == State.HOOKED:
+	if current_state == State.HOOKED or current_state == State.REELING:
 		return
 		
 	var throw_distance := clamp(fishing_rod.hook_end.global_position.distance_to(get_global_mouse_position()) / 80.0, 0.0, 1.0)
@@ -96,6 +103,9 @@ func set_cursor_icon() -> void:
 		
 		State.HOOKED:
 			image = cursor_hooked.get_data()
+		
+		State.REELING:
+			image = cursor_reeling.get_data()
 	
 	image.resize(base_cursor_size.x * cursor_scale, base_cursor_size.y * cursor_scale, Image.INTERPOLATE_NEAREST)
 	texture.create_from_image(image)
@@ -116,11 +126,25 @@ func _on_screen_resize() -> void:
 
 func _on_rod_hooked() -> void:
 	current_state = State.HOOKED
+	is_hooked = true
 	set_cursor_icon()
 
 
 func _on_rod_hook_released() -> void:
 	current_state = State.READY1
+	is_hooked = false
 	set_cursor_icon()
 
 
+func _on_rod_reeling() -> void:
+	current_state = State.REELING
+	set_cursor_icon()
+
+
+func _on_rod_reeling_stopped() -> void:
+	if is_hooked:
+		current_state = State.HOOKED
+	else:
+		current_state = State.READY1
+		
+	set_cursor_icon()

@@ -9,6 +9,9 @@ class_name FishingRod
 signal rod_hooked
 signal rod_hook_released
 
+signal rod_reeling
+signal rod_reeling_stopped
+
 
 # Variables:
 #---------------------------------------
@@ -103,16 +106,20 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_released("Action1"):
 		break_hook()
 
-	if event.is_action_pressed("Action2"):
+	if event.is_action_pressed("Action2") and is_hooked:
 		is_reeling = true
 		current_reel_time = 0.0
 		player.player_movement.set_snap(false)
+
+		emit_signal("rod_reeling")
 
 	if event.is_action_released("Action2"):
 		is_reeling = false
 
 		if player.state_manager.current_state != PlayerBaseState.State.FALL:
 			player.player_movement.set_snap(true)
+		
+		emit_signal("rod_reeling_stopped")
 
 
 func _process(delta: float) -> void:
