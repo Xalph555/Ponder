@@ -118,6 +118,17 @@ func set_snap(is_enabled: bool) -> void:
 	# print("is snap vector enabled: ", is_enabled)
 
 
+func get_snap() -> Vector2:
+	return _snap_vector
+
+
+func is_snapped() -> bool:
+	if _snap_dir == Vector2.ZERO:
+		return false
+
+	return true
+
+
 func set_velocity(new_velocity: Vector2) -> void:
 	velocity = new_velocity
 

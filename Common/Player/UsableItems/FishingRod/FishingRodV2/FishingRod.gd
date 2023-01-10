@@ -53,7 +53,7 @@ var current_reel_time := 0.0
 export(float) var reel_tolorence := 3.0
 
 # pullling
-var pullback_force := 50.0 
+var pullback_force := 45.0 # this value should not change
 var pullback_velocity := Vector2.ZERO
 
 # grappling
@@ -68,7 +68,6 @@ export(float) var grapple_adjustment_force := 60.0
 # scene references
 onready var pivot_point := $PivotPoint
 onready var hook_end := $PivotPoint/AnimationPivot/HookPoint
-onready var jump_height_ray := $JumpHeightRay
 onready var rod_sprite := $PivotPoint/AnimationPivot/Sprite
 onready var hitbox := $PivotPoint/RodHitBox
 
@@ -78,8 +77,6 @@ onready var hitbox := $PivotPoint/RodHitBox
 func init(new_player: Player) -> void:
 	.init(new_player)
 	set_active_item(false)
-
-	jump_height_ray.cast_to.y = player.player_movement.jump_height + 7.0
 
 	player.state_manager.connect("state_changed", self, "_on_state_changed")
 
@@ -109,17 +106,17 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Action2") and is_hooked:
 		is_reeling = true
 		current_reel_time = 0.0
-		player.player_movement.set_snap(false)
 
 		emit_signal("rod_reeling")
 
 	if event.is_action_released("Action2"):
-		is_reeling = false
+		stop_reeling()
+		# is_reeling = false
 
-		if player.state_manager.current_state != PlayerBaseState.State.FALL:
-			player.player_movement.set_snap(true)
+		# if player.state_manager.current_state != PlayerBaseState.State.FALL:
+		# 	player.player_movement.set_snap(true)
 		
-		emit_signal("rod_reeling_stopped")
+		# emit_signal("rod_reeling_stopped")
 
 
 func _process(delta: float) -> void:
@@ -136,18 +133,19 @@ func _physics_process(delta: float) -> void:
 	
 	hook_end_hook_dist = hook_end.global_position.distance_to(_hook_instance.global_position)
 
+	# debugging visualisation 
 	_hook_instance.col_shape.shape.radius = get_line_with_tension()
 
 	if is_reeling:
-		reel_line(delta)
+		start_reeling(delta)
 
 	if is_grappling:
 		grappling(delta)
-
 	else:
 		pulling(delta)
 
-	if not is_grappling and not player.is_on_floor() and hook_end_hook_dist >= get_line_with_tension():
+	# if not is_grappling and not player.is_on_floor() and hook_end_hook_dist >= get_line_with_tension():
+	if can_grapple():
 		player.state_manager.change_state(PlayerBaseState.State.ITEM_OVERRIDE)
 
 
@@ -276,9 +274,29 @@ func break_hook() -> void:
 	print("Hook Broken")
 
 
-func reel_line(delta : float) -> void:
-	if hook_end_hook_dist > get_line_with_tension() + reel_tolorence:
+func start_reeling(delta : float) -> void:
+	# if hook_end_hook_dist > get_line_with_tension() + reel_tolorence:
+	# 	# stop_reeling()
+	# 	return
+	
+	# # check perpendicular
+	# var dir_of_rod := Vector2.RIGHT.rotated(pivot_point.rotation)
+	# var dir_to_hook := pivot_point.global_position.direction_to(_hook_instance.global_position) as Vector2
+
+	# print("Dir of Rod: ", dir_of_rod)
+	# print("Dir to hook: ", dir_to_hook)
+	# print("Dot of Rod when Reeling: ", dir_of_rod.dot(dir_to_hook))
+	# print("---------------------------------")
+
+	# if dir_of_rod.dot(dir_to_hook) < 0.7:
+	# 	# stop_reeling()
+	# 	return
+	
+	if not can_reel():
 		return
+	
+	if player.player_movement.is_snapped():
+		player.player_movement.set_snap(false)
 
 	current_reel_time += delta
 
@@ -287,6 +305,34 @@ func reel_line(delta : float) -> void:
 
 	max_line_length = clamp(max_line_length - reel_amount, min_line_length, max_line_length)
 	# print("Reeling - Max Line Length: ", max_line_length)
+
+
+func stop_reeling() -> void:
+	if player.state_manager.current_state != PlayerBaseState.State.FALL:
+		player.player_movement.set_snap(true)
+	
+	is_reeling = false
+
+	emit_signal("rod_reeling_stopped")
+
+
+func can_reel() -> bool:
+	var dir_of_rod := Vector2.RIGHT.rotated(pivot_point.rotation)
+	var dir_to_hook := pivot_point.global_position.direction_to(_hook_instance.global_position) as Vector2
+
+	var can := hook_end_hook_dist <= get_line_with_tension() + reel_tolorence and dir_of_rod.dot(dir_to_hook) >= 0.7
+
+	# print("Can Reel: ", can)
+	# print("Reel length test: ", hook_end_hook_dist <= get_line_with_tension() + reel_tolorence)
+	# print("Dot check: ", dir_of_rod.dot(dir_to_hook) >= 0.7)
+	# print("-------------------------------------------")
+	# print("Player snap vector: ", player.player_movement._snap_vector)
+
+	return can
+
+
+func is_being_reeled() -> bool:
+	return can_reel() and is_reeling
 
 
 func grappling(delta : float) -> void:
@@ -345,6 +391,12 @@ func get_movement_input() -> Vector2:
 	return input_dir
 
 
+func can_grapple() -> bool:
+	var dir_to_hook_end := _hook_instance.global_position.direction_to(hook_end.global_position) as Vector2
+
+	return not is_grappling and not player.is_on_floor() and hook_end_hook_dist >= get_line_with_tension() and Vector2.UP.dot(dir_to_hook_end) < -0.3
+	
+
 func check_grapple_state_change() -> void:
 	if player.is_on_floor():
 		player.player_movement.set_snap(true)
@@ -373,16 +425,23 @@ func pulling(delta : float) -> void:
 		# print("Fishing rod should not be pulling anymore")
 
 	else:
-		var dir_to_hook := (_hook_instance.global_position - hook_end.global_position).normalized() as Vector2 
+		var dir_to_hook := hook_end.global_position.direction_to(_hook_instance.global_position) as Vector2
 
-		if not player.state_manager.current_state == PlayerBaseState.State.IDLE or is_reeling:
-			var force_multiplier := max(inverse_lerp(max_line_length, get_line_with_tension(), hook_end_hook_dist), 0)
+		# if not player.state_manager.current_state == PlayerBaseState.State.IDLE or is_reeling:
+		if not player.state_manager.current_state == PlayerBaseState.State.IDLE or can_reel():
+			# var force_multiplier := max(inverse_lerp(max_line_length, get_line_with_tension(), hook_end_hook_dist), 0)
+			var force_multiplier := max(hook_end_hook_dist - get_line_with_tension(), 0)
+
+			print("force multiplier pullback: ", force_multiplier)
 
 			pullback_velocity = Vector2.ONE * pullback_force * force_multiplier
 
+			# print("Pullback force is being applied")
+
 		pullback_velocity = pullback_velocity.length() * dir_to_hook
 
-		if player.player_movement._snap_vector != Vector2.ZERO and not is_reeling:
+		if player.player_movement._snap_vector != Vector2.ZERO and not is_being_reeled():
+			# print("Stoping pullback y velocity")
 			pullback_velocity.y = 0.0
 		
 	# print("Pullback Velocity(X, Y): ", pullback_velocity)
@@ -399,7 +458,6 @@ func transition_to_grapple():
 	if not is_grappling:
 		is_grappling = true
 		can_rotate_grapple = false
-		
 		
 		current_rotation_transition = 0.0
 
@@ -421,20 +479,24 @@ func _on_hook_hooked() -> void:
 	is_hooked = true
 	max_line_length = hook_end.global_position.distance_to(_hook_instance.global_position) + line_length_slack
 	pullback_velocity = Vector2.ZERO
+	is_grappling = false
 
 	if player.state_manager.current_state == PlayerBaseState.State.FALL:
-		player.state_manager.change_state(PlayerBaseState.State.ITEM_OVERRIDE)
+		var dir_to_hook := _hook_instance.global_position.direction_to(hook_end.global_position) as Vector2
 
-		# This second conversion is required to prevent snapping and jittery behaviour when first 
-		# grappling while falling - likely works due to it dampening the extra velocity from the player
-		convert_to_angular_vel(player.player_movement.velocity)
+		if Vector2.UP.dot(dir_to_hook) < -0.3:
+			player.state_manager.change_state(PlayerBaseState.State.ITEM_OVERRIDE)
 
-		# print("Fishing Rod now grappling")
+			# This second conversion is required to prevent snapping and jittery behaviour when first 
+			# grappling while falling - likely works due to it dampening the extra velocity from the player
+			convert_to_angular_vel(player.player_movement.velocity)
+
+			print("Fishing Rod now grappling")
 	
 	elif player.state_manager.current_state != PlayerBaseState.State.ITEM_OVERRIDE:
 		is_grappling = false
-		# print("Fishing Rod now pulling")
-	
+		print("Fishing Rod now pulling")
+
 	emit_signal("rod_hooked")
 	
 

@@ -6,6 +6,8 @@ class_name PlayerMoveState
 
 # Functions:
 #---------------------------------------
+# generic move state - need to implement "_enter(arg := {})" in derived classes
+
 func input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump"):
 		state_manager.change_state(PlayerBaseState.State.JUMP)
