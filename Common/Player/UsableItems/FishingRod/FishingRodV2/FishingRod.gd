@@ -341,12 +341,13 @@ func grappling(delta : float) -> void:
 	
 	angle_accel += get_movement_input().x * push_force
 
-	# TODO: need to update player sprite facing direction
-
+	#updating player sprite direction
 	player.update_sprite(get_movement_input())
 
 	angular_velocity += angle_accel	
 	angular_velocity *= 0.99
+
+	# print("Angular Vel: ", angular_velocity)
 
 	angular_vel_rate_of_change = angular_velocity - previous_anglular_velocity
 
@@ -410,10 +411,6 @@ func check_grapple_state_change() -> void:
 			player.state_manager.change_state(PlayerBaseState.State.IDLE)
 
 
-func convert_to_angular_vel(current_vel : Vector2) -> void:
-	angular_velocity = sign(current_vel.x) * (current_vel.length() / get_weighted_swing_speed())
-
-
 func get_weighted_swing_speed() -> float:
 	var swing_speed_weight := clamp(get_line_with_tension() / 100.0, 0.4, 1.0)
 	return swing_speed * swing_speed_weight
@@ -432,7 +429,7 @@ func pulling(delta : float) -> void:
 			# var force_multiplier := max(inverse_lerp(max_line_length, get_line_with_tension(), hook_end_hook_dist), 0)
 			var force_multiplier := max(hook_end_hook_dist - get_line_with_tension(), 0)
 
-			print("force multiplier pullback: ", force_multiplier)
+			# print("force multiplier pullback: ", force_multiplier)
 
 			pullback_velocity = Vector2.ONE * pullback_force * force_multiplier
 
@@ -454,16 +451,23 @@ func get_line_with_tension() -> float:
 	return max_line_length * max_tension
 
 
+func convert_to_angular_vel(current_vel : Vector2) -> void:
+	angular_velocity = sign(current_vel.x) * (current_vel.length() / get_weighted_swing_speed())
+
+
 func transition_to_grapple():
 	if not is_grappling:
 		is_grappling = true
 		can_rotate_grapple = false
-		
 		current_rotation_transition = 0.0
-
+		
 		pullback_velocity = Vector2.ZERO
 
-		convert_to_angular_vel(player.player_movement.velocity)\
+		var conversion_weight = clamp(inverse_lerp(min_line_length, 30.0, get_line_with_tension()) , 0.2, 0.8)
+
+		# print("Conversion weight: ",conversion_weight)
+
+		convert_to_angular_vel(player.player_movement.velocity * conversion_weight)
 
 		# print("Pullback Velocity(X, Y): ", pullback_velocity)
 
@@ -486,10 +490,6 @@ func _on_hook_hooked() -> void:
 
 		if Vector2.UP.dot(dir_to_hook) < -0.3:
 			player.state_manager.change_state(PlayerBaseState.State.ITEM_OVERRIDE)
-
-			# This second conversion is required to prevent snapping and jittery behaviour when first 
-			# grappling while falling - likely works due to it dampening the extra velocity from the player
-			convert_to_angular_vel(player.player_movement.velocity)
 
 			print("Fishing Rod now grappling")
 	
