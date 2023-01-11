@@ -40,7 +40,7 @@ export(float) var rotation_limit_check := 10.0
 var can_rotate_grapple := false
 var previous_anglular_velocity := 0.0
 
-export(float) var rotation_speed_transition := 1.0
+export(float) var rotation_speed_transition := 0.5 #1.0
 var current_rotation_transition := 0.0
 
 # reeling
@@ -345,7 +345,14 @@ func grappling(delta : float) -> void:
 	player.update_sprite(get_movement_input())
 
 	angular_velocity += angle_accel	
+
+	# print("Hook to Hook end: ", _hook_instance.global_position.direction_to(hook_end.global_position).y)
+
+	# if _hook_instance.global_position.direction_to(hook_end.global_position).y >= 0:
 	angular_velocity *= 0.99
+	
+	# else:
+	# 	angular_velocity *= 0.5
 
 	# print("Angular Vel: ", angular_velocity)
 
@@ -463,9 +470,9 @@ func transition_to_grapple():
 		
 		pullback_velocity = Vector2.ZERO
 
-		var conversion_weight = clamp(inverse_lerp(min_line_length, 30.0, get_line_with_tension()) , 0.2, 0.8)
+		var conversion_weight = clamp(inverse_lerp(min_line_length, 40.0, get_line_with_tension()) , 0.05, 0.8)
 
-		# print("Conversion weight: ",conversion_weight)
+		print("Conversion weight: ",conversion_weight)
 
 		convert_to_angular_vel(player.player_movement.velocity * conversion_weight)
 
