@@ -144,7 +144,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		pulling(delta)
 
-	# if not is_grappling and not player.is_on_floor() and hook_end_hook_dist >= get_line_with_tension():
+	# print("Is Player Snapped: ", player.player_movement.is_snapped())
+	# print("Is player on floor: ", player.is_on_floor())
+	
 	if can_grapple():
 		player.state_manager.change_state(PlayerBaseState.State.ITEM_OVERRIDE)
 
@@ -346,13 +348,7 @@ func grappling(delta : float) -> void:
 
 	angular_velocity += angle_accel	
 
-	# print("Hook to Hook end: ", _hook_instance.global_position.direction_to(hook_end.global_position).y)
-
-	# if _hook_instance.global_position.direction_to(hook_end.global_position).y >= 0:
 	angular_velocity *= 0.99
-	
-	# else:
-	# 	angular_velocity *= 0.5
 
 	# print("Angular Vel: ", angular_velocity)
 
@@ -431,23 +427,46 @@ func pulling(delta : float) -> void:
 	else:
 		var dir_to_hook := hook_end.global_position.direction_to(_hook_instance.global_position) as Vector2
 
-		# if not player.state_manager.current_state == PlayerBaseState.State.IDLE or is_reeling:
-		if not player.state_manager.current_state == PlayerBaseState.State.IDLE or can_reel():
-			# var force_multiplier := max(inverse_lerp(max_line_length, get_line_with_tension(), hook_end_hook_dist), 0)
-			var force_multiplier := max(hook_end_hook_dist - get_line_with_tension(), 0)
+		# print("Dir to hook: ", dir_to_hook)
 
-			# print("force multiplier pullback: ", force_multiplier)
+		# if not player.state_manager.current_state == PlayerBaseState.State.IDLE or can_reel():
+		# 	var force_multiplier := max(hook_end_hook_dist - get_line_with_tension(), 0)
 
-			pullback_velocity = Vector2.ONE * pullback_force * force_multiplier
+		# 	# print("force multiplier pullback: ", force_multiplier)
 
-			# print("Pullback force is being applied")
+		# 	pullback_velocity = Vector2.ONE * pullback_force * force_multiplier
 
-		pullback_velocity = pullback_velocity.length() * dir_to_hook
+		# # print("Pullback force is being applied")
 
-		if player.player_movement._snap_vector != Vector2.ZERO and not is_being_reeled():
-			# print("Stoping pullback y velocity")
+		# pullback_velocity = pullback_velocity.length() * dir_to_hook
+
+		if player.player_movement.is_on_slope():
+			dir_to_hook = dir_to_hook.rotated(player.get_floor_normal().angle())
+		# # 	dir_to_hook.x = sign(dir_to_hook.x) * (1 - abs(dir_to_hook.x))
+
+		# 	var dir_to_hook_player := global_position.direction_to(_hook_instance.global_position)
+
+		# 	if abs(dir_to_hook.x) < 0.1 and abs(dir_to_hook_player.x) < 0.1:
+		# 		print("Using alternative dir")
+		# 		dir_to_hook.x = sign(dir_to_hook.x) * (1 - abs(dir_to_hook.x))
+			
+		# 	elif abs(dir_to_hook_player.x) > abs(dir_to_hook.x):
+		# 		print("Using player x dir")
+		# 		dir_to_hook.x = dir_to_hook_player.x
+		# 	else:
+		# 		print("not")
+
+		print("Dir to hook: ", dir_to_hook)
+
+		var force_multiplier := max(hook_end_hook_dist - get_line_with_tension(), 0)
+		pullback_velocity = pullback_force * force_multiplier * dir_to_hook
+
+		# print("Pullback Velocity before y-adjustment (X, Y): ", pullback_velocity)
+
+		if player.player_movement._snap_vector != Vector2.ZERO and not is_being_reeled():# and not (hook_end_hook_dist > get_line_with_tension() + 5):
 			pullback_velocity.y = 0.0
 		
+
 	# print("Pullback Velocity(X, Y): ", pullback_velocity)
 	player.player_movement.add_velocity(pullback_velocity)
 	
@@ -472,7 +491,7 @@ func transition_to_grapple():
 
 		var conversion_weight = clamp(inverse_lerp(min_line_length, 40.0, get_line_with_tension()) , 0.05, 0.8)
 
-		print("Conversion weight: ",conversion_weight)
+		# print("Conversion weight: ",conversion_weight)
 
 		convert_to_angular_vel(player.player_movement.velocity * conversion_weight)
 

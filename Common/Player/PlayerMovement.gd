@@ -25,7 +25,7 @@ var _snap_dir := Vector2.DOWN
 
 export(float) var _snap_vec_len := 16.0
 export(int) var _max_slides := 4
-export(float) var _max_slope_angle := 46.0
+export(float) var _max_slope_angle := 47.0
 
 var _do_stop_on_slope := true
 var _has_infinite_inertia := true
@@ -72,42 +72,48 @@ func move_player(delta: float, dir := Vector2.ZERO, accel := acceleration, speed
 
 	clamp_terminal_speed(speed_terminal)
 
+	# print("Player Velocity (X, Y): ", velocity)
+
+	# print("Floor Normal Angle: ", player.get_floor_normal().angle())
+
 	player_move_and_slide()
 	
 	# print("Player Velocity: ", velocity)
 
 
 func player_move_and_slide() -> void:
-	velocity = player.move_and_slide_with_snap(velocity, 
-												_snap_vector, 
-												_up_dir, 
-												_do_stop_on_slope, 
-												_max_slides, 
-												_max_slope_angle, 
-												_has_infinite_inertia)
-	# print("Player Velocity (X, Y): ", velocity)
-	# print("Player Velocity: ", velocity.length())
+	# velocity = player.move_and_slide_with_snap(velocity, 
+	# 											_snap_vector, 
+	# 											_up_dir, 
+	# 											_do_stop_on_slope, 
+	# 											_max_slides, 
+	# 											_max_slope_angle, 
+	# 											_has_infinite_inertia)
 	
 	# this was my old movement code - things seem to work fine without this? (16/11/2022)
-	# if player.is_on_wall():
-	# 	velocity = player.move_and_slide_with_snap(velocity, 
-	# 											   _snap_vector, 
-	# 											   _up_dir, 
-	# 											   _do_stop_on_slope, 
-	# 											   _max_slides, 
-	# 											   _max_slope_angle, c
-	# 											   _has_infinite_inertia)
+	if player.is_on_wall():
+		velocity = player.move_and_slide_with_snap(velocity, 
+												   _snap_vector, 
+												   _up_dir, 
+												   _do_stop_on_slope, 
+												   _max_slides, 
+												   _max_slope_angle,
+												   _has_infinite_inertia)
 	
-	# else:
-	# 	velocity.y = player.move_and_slide_with_snap(velocity, 
-	# 											     _snap_vector, 
-	# 											     _up_dir, 
-	# 											     _do_stop_on_slope, 
-	# 											     _max_slides, 
-	# 											     _max_slope_angle, 
-	# 											     _has_infinite_inertia).y
+	else:
+		velocity.y = player.move_and_slide_with_snap(velocity, 
+												     _snap_vector, 
+												     _up_dir, 
+												     _do_stop_on_slope, 
+												     _max_slides, 
+												     _max_slope_angle, 
+												     _has_infinite_inertia).y
+
+	# print("Player Velocity (X, Y): ", velocity)
+	# print("Player Velocity: ", velocity.length())
 
 
+# snap vector funcs
 func set_snap(is_enabled: bool) -> void:
 	if is_enabled:
 		_snap_vector = _snap_dir * _snap_vec_len
@@ -129,16 +135,24 @@ func is_snapped() -> bool:
 	return true
 
 
+# slope funcs
+func is_on_slope() -> bool:
+	var up_dir_dot := _up_dir.dot(player.get_floor_normal())
+	return 0.69 < up_dir_dot and up_dir_dot < 0.79
+
+
+# gravity funcs
+func get_gravity() -> float:
+	return _jump_gravity if velocity.y < 0.0 else _fall_gravity
+
+
+# velocity funcs
 func set_velocity(new_velocity: Vector2) -> void:
 	velocity = new_velocity
 
 
 func add_velocity(vel_to_add: Vector2) -> void:
 	velocity += vel_to_add
-
-
-func get_gravity() -> float:
-	return _jump_gravity if velocity.y < 0.0 else _fall_gravity
 
 
 func clamp_terminal_speed(speed_terminal: float) -> void:

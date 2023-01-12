@@ -59,6 +59,8 @@ func init(new_player : Player) -> void:
 
 	set_process(true)
 
+	_on_screen_resize()
+
 
 func _process(delta: float) -> void:
 	if current_state == State.HOOKED or current_state == State.REELING:
