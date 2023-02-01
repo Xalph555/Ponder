@@ -21,6 +21,8 @@ export(float) var friction_y := 0.01
 
 var velocity := Vector2.ZERO
 
+var hooked_normal := Vector2.ZERO
+
 var is_moving := false 
 
 
@@ -48,6 +50,7 @@ func _exit_tree() -> void:
 
 func handle_collision(col_object : KinematicCollision2D) -> void:
 	is_moving = false
+	hooked_normal = col_object.normal
 	emit_signal("hook_hooked")
 	print("hook_hooked signal sent")
 

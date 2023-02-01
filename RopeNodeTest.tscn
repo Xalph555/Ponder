@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Common/Player/UsableItems/FishingRod/FishingRodV2/RopeNode.tscn" type="PackedScene" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://RopeNodeTest.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 1, 1 )
+
+[sub_resource type="CircleShape2D" id=2]
+resource_local_to_scene = true
+
+[node name="RopeNodeTest" type="StaticBody2D"]
+collision_layer = 0
+script = ExtResource( 3 )
+rope_node_scene = ExtResource( 1 )
+rope_length = 100.0
+
+[node name="Icon" type="Sprite" parent="."]
+scale = Vector2( 0.15, 0.15 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+modulate = Color( 0.12549, 1, 0, 1 )
+rotation = -0.00462261
+shape = SubResource( 2 )
