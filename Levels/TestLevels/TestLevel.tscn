@@ -549,6 +549,23 @@ __meta__ = {
 "_edit_group_": true
 }
 
+[node name="FishingRod" parent="PlayerV2" index="6"]
+hook_throwing_force = 800.0
+line_length_slack = 5.0
+min_line_length = 5.0
+min_tension = 0.1
+rotation_acceleration = 50.0
+rotation_limit_check = 10.0
+rotation_speed_transition = 0.5
+reel_acceleration = 250.0
+time_to_max_reel = 2.5
+reel_tolorence = 3.0
+pendulumn_fall = 0.25
+push_force = 0.065
+swing_speed = 100.0
+max_swing_speed = 500.0
+grapple_adjustment_force = 60.0
+
 [editable path="WindArea"]
 [editable path="PlayerV2"]
 [editable path="PlayerV2/PlayerStateMachine"]

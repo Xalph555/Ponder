@@ -86,15 +86,6 @@ func update_wrapping() -> void:
 		if new_point == Vector2.INF:
 			return
 
-		# var attemps := 0
-		# while (space_state.intersect_ray(hook_end.global_position, new_point, [player, _hook_instance]) or space_state.intersect_ray(wrap_points.back(), new_point, [player, _hook_instance])) and (attemps < offset_attemps):
-		# 	new_point += offset_dir * wrapping_offset
-		# 	attemps += 1
-		
-		# if attemps >= offset_attemps:
-		# 	print("Failed to offset point")
-		# 	return
-
 		# is wrapping allowed
 		var dist_to_last_point = new_point.distance_to(rod_ref.wrap_points.back())
 
