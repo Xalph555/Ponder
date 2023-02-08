@@ -31,7 +31,7 @@ func change_state(new_state: int, arg := {}) -> void:
 
 	states[current_state].enter(arg)
 
-	print("New State: ", states[current_state].get_state_name())
+	# print("New State: ", states[current_state].get_state_name())
 
 
 # need initialisation function to properly intialise state machine

@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://Common/Player/UsableItems/BaseItem.gd"
 }, {
 "base": "Node",
+"class": "BaseRodState",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/FishingRod/FishingRodV2/States/BaseRodState.gd"
+}, {
+"base": "Node",
 "class": "BaseState",
 "language": "GDScript",
 "path": "res://Common/StateMachine/BaseState.gd"
@@ -151,6 +156,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "BaseItem": "",
+"BaseRodState": "",
 "BaseState": "",
 "BaseStateManager": "",
 "DefaultSaveWrapper": "",

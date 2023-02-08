@@ -6,6 +6,7 @@ class_name BaseState
 
 # Signals:
 #---------------------------------------
+# these need to be connected in the state manager derived from the base StateManager class
 signal state_entered
 signal state_exited
 

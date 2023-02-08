@@ -25,7 +25,7 @@ func _ready() -> void:
 	# item_manager.init(self)
 
 	fishing_rod.init(self)
-	fishing_rod.set_active_item(true)
+	# fishing_rod.set_active_item(true)
 
 	player_half_height = capsule_col.shape.radius + (capsule_col.shape.height / 2.0)
 
