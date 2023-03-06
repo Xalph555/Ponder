@@ -8,10 +8,9 @@ radius = 2.0
 
 [sub_resource type="CircleShape2D" id=2]
 resource_local_to_scene = true
-radius = 5.0
 
 [node name="FishingHook" type="KinematicBody2D"]
-collision_layer = 512
+collision_layer = 0
 script = ExtResource( 2 )
 
 [node name="Hook" type="Sprite" parent="."]
@@ -20,8 +19,10 @@ texture = ExtResource( 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
-[node name="LineDistanceVisual" type="Area2D" parent="."]
+[node name="MaxLengthVisualisation" type="Area2D" parent="."]
+monitoring = false
+monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="LineDistanceVisual"]
-modulate = Color( 0.956863, 1, 0.188235, 1 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MaxLengthVisualisation"]
+modulate = Color( 0, 1, 0.156863, 1 )
 shape = SubResource( 2 )

@@ -6,7 +6,7 @@ class_name FishingHook
 
 # Signals:
 #---------------------------------------
-signal hook_hooked
+signal hook_hooked(col_object)
 signal hook_released
 
 
@@ -25,8 +25,9 @@ var hooked_normal := Vector2.ZERO
 
 var is_moving := false 
 
+onready var col_shape := $CollisionShape2D
 
-onready var col_shape := $LineDistanceVisual/CollisionShape2D
+onready var debug_max_length := $MaxLengthVisualisation/CollisionShape2D
 
 
 # Functions:
@@ -51,8 +52,9 @@ func _exit_tree() -> void:
 func handle_collision(col_object : KinematicCollision2D) -> void:
 	is_moving = false
 	hooked_normal = col_object.normal
-	emit_signal("hook_hooked")
-	print("hook_hooked signal sent")
+	emit_signal("hook_hooked", col_object)
+
+	# print("hook_hooked signal sent")
 
 
 func apply_friction() -> void:
@@ -70,3 +72,19 @@ func throw_hook(spawn_pos : Vector2, throw_dir : Vector2, throw_force : float) -
 	velocity = throw_dir * throw_force
 
 	is_moving = true
+
+
+func attach_to_object(obj_to_attach) -> void:
+	col_shape.set_deferred("disabled", true)
+
+	set_collision_layer_bit(10, false)
+	set_collision_mask_bit(1, false)
+
+	# var pos := self.global_position
+
+	get_parent().remove_child(self)
+	obj_to_attach.add_child(self)
+
+	self.global_position = obj_to_attach.global_position
+
+	

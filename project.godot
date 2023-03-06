@@ -84,6 +84,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/UI/TestingPropertyPanels/LevelSwitcher/LevelSwitcher.gd"
 }, {
+"base": "Node",
+"class": "ObjectMovement",
+"language": "GDScript",
+"path": "res://Common/LevelElements/ObjectMovement.gd"
+}, {
 "base": "KinematicBody2D",
 "class": "PACHook",
 "language": "GDScript",
@@ -144,6 +149,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Common/Player/UsableItems/Ring/RingObject.gd"
 }, {
+"base": "Node",
+"class": "RodAttachedObject",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/FishingRod/FishingRodV2/RodAttachedObject.gd"
+}, {
+"base": "Node",
+"class": "RodGrappleParams",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/FishingRod/FishingRodV2/RodGrappleParams.gd"
+}, {
+"base": "Node",
+"class": "RodPullParams",
+"language": "GDScript",
+"path": "res://Common/Player/UsableItems/FishingRod/FishingRodV2/RodPullParams.gd"
+}, {
 "base": "Reference",
 "class": "TempTimer",
 "language": "GDScript",
@@ -170,6 +190,7 @@ _global_script_class_icons={
 "LeafItem": "",
 "LeafObject": "",
 "LevelSwitcher": "",
+"ObjectMovement": "",
 "PACHook": "",
 "PACRodDefaultValues": "",
 "PhysicsHook": "",
@@ -182,6 +203,9 @@ _global_script_class_icons={
 "RingDefaultValues": "",
 "RingItem": "",
 "RingObject": "",
+"RodAttachedObject": "",
+"RodGrappleParams": "",
+"RodPullParams": "",
 "TempTimer": "",
 "WindArea": ""
 }
@@ -311,6 +335,7 @@ CycleRight={
 2d_physics/layer_1="Ground"
 2d_physics/layer_10="Player"
 2d_physics/layer_15="Breakable"
+2d_physics/layer_16="Pushable"
 
 [physics]
 

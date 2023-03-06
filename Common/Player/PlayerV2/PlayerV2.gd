@@ -10,7 +10,6 @@ var player_half_height := 0.0
 
 onready var player_movement := $PlayerMovement
 onready var state_manager := $PlayerStateMachine
-# onready var item_manager := $ItemManager
 onready var fishing_rod := $FishingRod
 
 onready var _sprite := $Sprite

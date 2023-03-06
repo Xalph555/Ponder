@@ -28,7 +28,7 @@ export(int) var _max_slides := 4
 export(float) var _max_slope_angle := 47.0
 
 var _do_stop_on_slope := true
-var _has_infinite_inertia := true
+var _has_infinite_inertia := false
 
 var _snap_vector := _snap_dir * _snap_vec_len
 
@@ -102,12 +102,23 @@ func player_move_and_slide() -> void:
 	
 	else:
 		velocity.y = player.move_and_slide_with_snap(velocity, 
-												     _snap_vector, 
-												     _up_dir, 
-												     _do_stop_on_slope, 
-												     _max_slides, 
-												     _max_slope_angle, 
-												     _has_infinite_inertia).y
+													 _snap_vector, 
+													 _up_dir, 
+													 _do_stop_on_slope, 
+													 _max_slides, 
+													 _max_slope_angle, 
+													 _has_infinite_inertia).y
+	
+	# push pushable object
+	for i in player.get_slide_count():
+		var collision = player.get_slide_collision(i)
+
+		if not is_instance_valid(collision.collider):
+			continue
+		
+		if collision.collider.is_in_group("Pushable"):
+			var push_force := max(velocity.length() * 0.5, 0.5)
+			collision.collider.object_movement.add_velocity(-collision.normal * push_force)
 
 	# print("Player Velocity (X, Y): ", velocity)
 	# print("Player Velocity: ", velocity.length())

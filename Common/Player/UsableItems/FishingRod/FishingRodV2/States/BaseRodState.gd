@@ -17,72 +17,50 @@ signal state_exited
 #---------------------------------------
 var rod_ref
 
+var attached_player : RodAttachedObject
+
 
 # Functions:
 #--------------------------------------
 func set_up_state(rod) -> void:
-    rod_ref = rod
+	rod_ref = rod
 
 
-func enter() -> void:
-    pass
-
+func enter(args := {}) -> void:
+	if args.has("player_ref"):
+		attached_player = RodAttachedObject.new(args["player_ref"])
+		# print("Attached Player to Rod: ", attached_player.attached_entity)
 
 func exit() -> void:
-    pass
+	pass
 
-
+	
 func update_unwrapping() -> void:
-    pass
-
+	pass
 
 func update_wrapping() -> void:
-    pass
-
-
-func get_max_line_length() -> float:
-    return 0.0
-
-
-func get_min_line_length() -> float:
-    return 0.0
-
-
-func get_line_length_max_tension() -> float:
-    return 0.0
-
-
-func get_line_length_min_tension() -> float:
-    return 0.0
-
-
-func transition_to_grapple() -> void:
 	pass
 
 
-func can_grapple() -> bool:
-    return false
+func handle_rod_behaviour(delta : float) -> void:
+	pass
 
 
-func check_grapple_state_change() -> void:
-    pass
+func transition_player_to_grapple() -> void:
+	pass
 
+func transition_player_to_pull() -> void:
+	attached_player.is_grappled = false
 
-func grapple_entity() -> void:
-    pass
-
-
-func pull_entity() -> void:
-    pass
+func can_player_grapple() -> bool:
+	return false
 
 
 func can_reel() -> bool:
-    return false
-
+	return false
 
 func start_reeling(delta : float) -> void:
-    pass
-
+	pass
 
 func stop_reeling() -> void:
-    pass
+	pass
